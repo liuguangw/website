@@ -19,10 +19,10 @@ class CreateUsersTable extends Migration
             $table->string('password')->comment('密码');
             $table->rememberToken();
             $table->string('nickname', 16)->comment('昵称');
-            $table->unsignedInteger('avatar_file_id')->comment('用户头像文件id')->default(0);
             $table->unsignedTinyInteger('sex')->comment('性别 0未知 1男 2女')->default(0);
             $table->string('email')->comment('email地址')->unique();
             $table->boolean('email_valid')->comment('email是否已验证')->default(false);
+            $table->boolean('need_reset_password')->comment('是否需要重置密码')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

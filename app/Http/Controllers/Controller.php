@@ -10,4 +10,32 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    public function __construct()
+    {
+        if ($this->needLogin()) {
+            $this->useAuthMiddleware();
+        }
+    }
+
+
+    /**
+     * 判断用户是否需要登录
+     *
+     * @return bool
+     */
+    protected function needLogin()
+    {
+        return false;
+    }
+
+    /**
+     * 使用auth中间件
+     *
+     * @return \Illuminate\Routing\ControllerMiddlewareOptions
+     */
+    protected function useAuthMiddleware()
+    {
+        return $this->middleware('auth');
+    }
 }

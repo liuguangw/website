@@ -11,4 +11,13 @@
 |
 */
 
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', 'IndexController@index');
+Route::get('/user', 'UserController@index')->name('userHome');
+Route::prefix('user')->group(function () {
+    Route::get('/login', 'UserController@login')->name('login');
+    Route::post('/login', 'UserController@doLogin');
+    Route::get('/register', 'UserController@register')->name('register');
+    Route::post('/register', 'UserController@doRegister');
+});

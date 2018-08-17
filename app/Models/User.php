@@ -40,13 +40,13 @@ class User extends Authenticatable
      */
     protected $attributes = [
         'sex' => 0,
-        'avatar_file_id' => 0,
         'email_valid' => 0,
+        'need_reset_password' => 0,
         'deleted_at' => null
     ];
 
     public function avatarFile()
     {
-        return $this->belongsTo('App\Models\UploadFile', 'avatar_file_id');
+        return $this->hasOne('App\Models\UploadFile', 'region_id')->where(['region_type' => 1]);
     }
 }

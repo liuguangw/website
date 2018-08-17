@@ -1,0 +1,116 @@
+/*登录注册页面样式*/
+html {
+    color: #90a3c0;
+    background-color: #1c262f;
+}
+
+html, body {
+    height: 100%;
+}
+
+.main-container {
+    width: 500px;
+    height: 90%;
+    display: table;
+    margin: 0 auto;
+}
+
+.form-warp {
+    width: 450px;
+    min-height: 400px;
+    display: table-cell;
+    vertical-align: middle;
+    position: relative;
+    font-size: 16px;
+}
+
+.form-warp > .login-form {
+    background-color: #252f39;
+    padding: 30px;
+    border-top: 3px solid #8dc26f;
+    box-shadow: 0px 15px 30px 0px rgba(0, 0, 0, 0.27);
+}
+
+h2 {
+    margin-bottom: 30px;
+    font-size: 1.8em;
+    font-weight: 300;
+    color: #8dc26f;
+}
+
+fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+fieldset div {
+    margin-bottom: 5px;
+}
+
+label {
+    cursor: default;
+    padding-right: 5px;
+}
+
+input.inputbox {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+    padding: 7px;
+    border: 1px solid transparent;
+    outline: none;
+    background-color: #1c262f;
+    color: #e1edff;
+}
+
+.inputbox:hover, .inputbox:focus {
+    border-color: #8dc26f;
+}
+
+input[type="button"], input[type="submit"], input[type="reset"], input[type="checkbox"], input[type="radio"] {
+    cursor: pointer;
+}
+
+label input {
+    vertical-align: middle;
+}
+
+input.check-input {
+    margin-right: 5px;
+}
+
+input.button {
+    margin: 15px 0;
+    width: 100%;
+    background: #8dc26f;
+    border: 1px solid #8dc26f;
+    padding: 7px;
+    line-height: 1.5;
+    color: #FFFFFF;
+}
+
+input.button:hover {
+    background-color: #9dd57d;
+    border: 1px solid transparent;
+}
+
+.links-area {
+    padding-top: 30px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.links-area a {
+    color: #757575;
+    text-decoration: none;
+}
+
+.links-area a:hover {
+    color: #efe3e3;
+}
+
+.links-area span {
+    padding: 0 5px;
+    color: #e0e0e0;
+}

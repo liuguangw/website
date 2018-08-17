@@ -18,5 +18,14 @@ class UploadFile extends Model
      *
      * @var array
      */
-    protected $fillable = ['ref_count', 'user_id', 'path', 'file_size', 'extension'];
+    protected $fillable = ['ref_count', 'user_id', 'path', 'file_size', 'extension', 'region_type', 'region_id'];
+
+    /**
+     * 初始值
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'ref_count' => 1
+    ];
 }
