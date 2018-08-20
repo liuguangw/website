@@ -14,6 +14,8 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'IndexController@index');
+Route::get('/captcha', 'IndexController@captcha')->name('captcha');
+Route::get('/debug', 'IndexController@debug');
 Route::get('/user', 'UserController@index')->name('userHome');
 Route::prefix('user')->group(function () {
     Route::get('/login', 'UserController@login')->name('login');

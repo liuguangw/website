@@ -9,10 +9,14 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Requests\UserLogin;
+use App\Http\Requests\UserRegister;
+use App\Models\User;
 use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
@@ -33,6 +37,13 @@ class UserController extends Controller
     {
         //排除不需要登录的方法
         parent::useAuthMiddleware()->except(['login', 'register', 'doLogin', 'doRegister', 'logout']);
+        //只能游客身份访问的方法
+        $this->middleware(function ($request, $next) {
+            if (Auth::check()) {
+                return redirect()->route('userHome');
+            }
+            return $next($request);
+        })->only(['login', 'register', 'doLogin', 'doRegister', 'logout']);
     }
 
     public function index()
@@ -62,20 +73,6 @@ class UserController extends Controller
     private function username()
     {
         return 'username';
-    }
-
-    /**
-     * 验证用户登录表单输入
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return void
-     */
-    private function validateLogin(Request $request)
-    {
-        $this->validate($request, [
-            $this->username() => 'required|string',
-            'password' => 'required|string',
-        ]);
     }
 
     /**
@@ -114,21 +111,19 @@ class UserController extends Controller
     protected function sendFailedLoginResponse(Request $request)
     {
         throw ValidationException::withMessages([
-            $this->username() => [trans('auth.failed')],
+            'password' => ['密码错误']
         ]);
     }
 
     /**
      * 处理用户登录
      *
-     * @param Request $request
+     * @param UserLogin $request
      * @return \Illuminate\Http\RedirectResponse
      * @throws ValidationException
      */
-    public function doLogin(Request $request)
+    public function doLogin(UserLogin $request)
     {
-        $this->validateLogin($request);
-
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
         // the IP address of the client making these requests into this application.
@@ -147,5 +142,16 @@ class UserController extends Controller
         $this->incrementLoginAttempts($request);
 
         $this->sendFailedLoginResponse($request);
+    }
+
+    public function doRegister(UserRegister $request)
+    {
+        $user = new User();
+        $user->fill($request->request->all());
+        $user->password = Hash::make($user->password);
+        if ($user->save()) {
+            Auth::loginUsingId($user->id);
+            return redirect()->route('userHome');
+        }
     }
 }

@@ -9,7 +9,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * 用户模型
  * Class User
  * @package App\Models
+ * @property  int $id 用户id
  * @property UploadFile avatarFile 头像文件
+ * @property string $password 加密过的密码
  */
 class User extends Authenticatable
 {

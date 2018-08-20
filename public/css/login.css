@@ -3974,6 +3974,12 @@ html, body {
     height: 100%;
 }
 
+.clearfix::after {
+    display: block;
+    clear: both;
+    content: "";
+}
+
 .main-container {
     width: 500px;
     height: 90%;
@@ -4010,7 +4016,7 @@ fieldset {
     padding: 0;
 }
 
-fieldset div {
+fieldset>div {
     margin-bottom: 5px;
 }
 
@@ -4028,6 +4034,10 @@ input.inputbox {
     outline: none;
     background-color: #1c262f;
     color: #e1edff;
+}
+
+.inputbox.error-input {
+    border-color: #ef2525;
 }
 
 .inputbox:hover, .inputbox:focus {
@@ -4079,4 +4089,34 @@ input.button:hover {
 .links-area span {
     padding: 0 5px;
     color: #e0e0e0;
+}
+
+.captcha-nav > .captcha-nav-input {
+    margin-right: 160px;
+}
+
+.captcha-nav > .captcha-nav-image {
+    width: 150px;
+    float: right;
+    padding-top: 14px;
+}
+
+.captcha-nav > .captcha-nav-image img {
+    cursor: pointer;
+    display: block;
+    outline: none;
+    border: none;
+    max-height: 40px;
+}
+/*错误提示框*/
+.alert {
+    position: relative;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+}
+.alert-danger {
+    color: #fb6a78;
+    border-color: #e63d4f;
 }
