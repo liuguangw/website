@@ -22,4 +22,6 @@ Route::prefix('user')->group(function () {
     Route::post('/login', 'UserController@doLogin');
     Route::get('/register', 'UserController@register')->name('register');
     Route::post('/register', 'UserController@doRegister');
+    Route::get('/password/modify','UserController@modifyPassword');
+    Route::post('/password/modify','UserController@doModifyPassword');
 });

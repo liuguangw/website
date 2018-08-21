@@ -9,6 +9,8 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Forum;
+use App\Models\ForumGroup;
 use App\Services\CaptchaService;
 use Illuminate\Http\Request;
 
@@ -16,7 +18,7 @@ class IndexController extends Controller
 {
     public function index()
     {
-        return 'hello world';
+        return 'hello world !';
     }
 
     /**
@@ -30,8 +32,20 @@ class IndexController extends Controller
         return $captchaService->getCaptchaResponse();
     }
 
-    public function debug(Request $request){
-        dump($request->session()->all(),$request->cookies->all());
+    public function debug(Request $request)
+    {
+        $forumGroups = ForumGroup::with('childForums')->get();
+        dump($forumGroups->toArray());
+        /**
+         * @var Forum $forum
+         */
+        $forum = Forum::with(['childForums', 'allChildForums','avatarFile'])->find(3);
+        dump($forum->toArray());
+        /**
+         * @var Forum $forum
+         */
+        $forum = Forum::with('parentForums')->find(6);
+        dump($forum->toArray());
         return '';
     }
 }

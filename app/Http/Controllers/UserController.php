@@ -36,18 +36,16 @@ class UserController extends Controller
     protected function useAuthMiddleware()
     {
         //排除不需要登录的方法
-        parent::useAuthMiddleware()->except(['login', 'register', 'doLogin', 'doRegister', 'logout']);
+        parent::useAuthMiddleware()->except(['login', 'register', 'doLogin', 'doRegister']);
         //只能游客身份访问的方法
-        $this->middleware(function ($request, $next) {
-            if (Auth::check()) {
-                return redirect()->route('userHome');
-            }
-            return $next($request);
-        })->only(['login', 'register', 'doLogin', 'doRegister', 'logout']);
+        $this->middleware('guest')->only(['login', 'register', 'doLogin', 'doRegister']);
     }
 
     public function index()
     {
+        /**
+         * @var User $user
+         */
         $user = Auth::user();
         return $user;
     }
@@ -153,5 +151,19 @@ class UserController extends Controller
             Auth::loginUsingId($user->id);
             return redirect()->route('userHome');
         }
+    }
+
+    /**
+     * 修改密码页面
+     * @todo
+     */
+    public function modifyPassword()
+    {
+        return 'modifyPassword page';
+    }
+
+    public function doModifyPassword()
+    {
+        return ['code' => '-1'];
     }
 }

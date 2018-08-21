@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * 上传的文件
- *
- * Class UploadFile
  * @package App\models
  * @property int $id 文件id
  */
