@@ -28,7 +28,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property string $updated_at 更新时间
  * @property string $deleted_at 删除时间
  * @property bool $is_deleted 是否标记为已删除
- * @property-read UploadFile avatarFile 头像文件
+ * @property-read UploadFile $avatarFile 头像文件
+ * @property-read string $avatar_url 头像url
  */
 class User extends Authenticatable
 {
@@ -56,7 +57,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $appends = ['is_deleted', 'sex_txt'];
+    protected $appends = ['is_deleted', 'sex_txt', 'avatar_url'];
 
     /**
      * 可以被批量赋值的属性。
@@ -113,5 +114,13 @@ class User extends Authenticatable
     public function getSexTxtAttribute()
     {
         return $this->sex_array[$this->sex];
+    }
+
+    public function getAvatarUrlAttribute()
+    {
+        if($this->avatarFile===null){
+            return asset('images/default/user_avatar.png');
+        }
+        return $this->avatarFile->url;
     }
 }

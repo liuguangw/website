@@ -93,4 +93,14 @@ class ForumGroup extends Model
     {
         return $this->hasMany(Forum::class);
     }
+
+
+    /**链接
+     * @param array $params
+     * @return string
+     */
+    public function link(array $params = [])
+    {
+        return route('forumGroup', array_merge(['id' => $this->id], $params));
+    }
 }

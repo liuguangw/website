@@ -1,0 +1,119 @@
+.breadcrumb {
+    margin: 2px 0;
+    line-height: 29px;
+}
+
+.breadcrumb ul, .breadcrumb li {
+    list-style: none;
+}
+
+.breadcrumb ul {
+    display: flex;
+    padding: 12px 0;
+    margin: 0;
+    color: #6c757d;
+}
+
+.breadcrumb li {
+    height: 29px;
+}
+
+.breadcrumb li.sep {
+    padding: 0 5px;
+}
+
+.breadcrumb li a {
+    color: #007bff;
+}
+
+.forum-box {
+    border: 1px solid #CDCDCD;
+    margin-bottom: 15px;
+}
+
+.forum-box .forum-header {
+    padding: 0 10px;
+    height: 31px;
+    line-height: 31px;
+    border-bottom: 1px solid #c2d5e3;
+    background-color: #e5edf2;
+    white-space: nowrap;
+    overflow: hidden;
+    color: #369;
+}
+
+.forum-box .forum-admin-list {
+    line-height: 18px;
+    padding: 10px;
+    border-bottom: 1px dashed #ab9b9b;
+}
+
+.forum-box .forum-admin-list a {
+    color: #369;
+}
+
+.forum-box .forum-intro {
+    padding: 10px;
+}
+.forum-box .forum-intro p{
+    margin: 0;
+}
+
+.forum-box .forum-topic-list {
+    padding: 0 10px;
+}
+
+.forum-box .forum-topic-list .topic-list {
+    width: 100%;
+}
+
+.forum-box .forum-topic-list .topic-list tr td {
+    height: 28px;
+    padding: 5px 0;
+    overflow: hidden;
+    border-bottom: 1px dashed #dedede;
+}
+
+.forum-box .forum-topic-list .topic-list tr:last-child td {
+    border-bottom: none;
+}
+
+.forum-box .forum-topic-list .topic-list td.topic-node-icon {
+    width: 17px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+.forum-box .forum-topic-list .topic-list td.topic-node-title a {
+    font-size: 15px;
+}
+.forum-box .forum-topic-list .topic-list td.topic-node-author,
+.forum-box .forum-topic-list .topic-list td.topic-node-count,
+.forum-box .forum-topic-list .topic-list td.topic-node-last-post {
+    line-height: 14px;
+}
+
+.forum-box .forum-topic-list .topic-list td.topic-node-author > a,
+.forum-box .forum-topic-list .topic-list td.topic-node-count > a,
+.forum-box .forum-topic-list .topic-list td.topic-node-last-post > a {
+    color: #333;
+    display: block;
+}
+
+.forum-box .forum-topic-list .topic-list td.topic-node-author > span,
+.forum-box .forum-topic-list .topic-list td.topic-node-count > span,
+.forum-box .forum-topic-list .topic-list td.topic-node-last-post > span {
+    display: block;
+    color: #999;
+}
+
+.forum-box .forum-topic-list .topic-list td.topic-node-author {
+    width: 105px;
+}
+
+.forum-box .forum-topic-list .topic-list td.topic-node-count {
+    width: 60px;
+}
+
+.forum-box .forum-topic-list .topic-list td.topic-node-last-post {
+    width: 105px;
+}

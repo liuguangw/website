@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id 论坛id
  * @property int $forum_group_id 所属分区id
  * @property string $name 名称
- * @property string $description 简要描述
+ * @property string $description 班规
  * @property int $post_count 主题总数
  * @property int $reply_count 回帖总数
  * @property int $today_post_count 今日主题数
@@ -34,7 +34,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \Illuminate\Database\Eloquent\Collection $parentForums 上级论坛列表
  * @property-read \Illuminate\Database\Eloquent\Collection $childForums 直接下级级论坛列表
  * @property-read \Illuminate\Database\Eloquent\Collection $allChildForums 所有下级论坛列表
- * @property-read UploadFile avatarFile 图标文件
+ * @property-read \Illuminate\Database\Eloquent\Collection $topics 主题列表
+ * @property-read UploadFile $avatarFile 图标文件
+ * @property-read string $avatar_url 论坛图标url
  */
 class Forum extends Model
 {
@@ -61,7 +63,7 @@ class Forum extends Model
      *
      * @var array
      */
-    protected $appends = ['is_deleted'];
+    protected $appends = ['is_deleted','avatar_url'];
 
     /**
      * 可以被批量赋值的属性。
@@ -100,6 +102,18 @@ class Forum extends Model
         }
     }
 
+    public function getAvatarUrlAttribute()
+    {
+        if($this->avatarFile===null){
+            return asset('images/default/forum_avatar.png');
+        }
+        return $this->avatarFile->url;
+    }
+
+    /**
+     * 所属分区
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function forumGroup()
     {
         return $this->belongsTo(ForumGroup::class);
@@ -153,5 +167,23 @@ class Forum extends Model
             ->orderByDesc('forum_trees.tree_deep')
             ->orderByDesc('forums.order_id')
             ->orderBy('forums.id');
+    }
+
+    /**
+     * 主题列表
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function topics()
+    {
+        return $this->hasMany(Topic::class);
+    }
+
+    /**链接
+     * @param array $params
+     * @return string
+     */
+    public function link(array $params = [])
+    {
+        return route('forum', array_merge(['id' => $this->id, 'page' => 1], $params));
     }
 }

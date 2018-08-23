@@ -13,7 +13,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', 'IndexController@index');
+Route::get('/', 'IndexController@index')->name('home');
 Route::get('/captcha', 'IndexController@captcha')->name('captcha');
 Route::get('/debug', 'IndexController@debug');
 Route::get('/user', 'UserController@index')->name('userHome');
@@ -22,6 +22,8 @@ Route::prefix('user')->group(function () {
     Route::post('/login', 'UserController@doLogin');
     Route::get('/register', 'UserController@register')->name('register');
     Route::post('/register', 'UserController@doRegister');
-    Route::get('/password/modify','UserController@modifyPassword');
-    Route::post('/password/modify','UserController@doModifyPassword');
+    Route::get('/password/modify', 'UserController@modifyPassword');
+    Route::post('/password/modify', 'UserController@doModifyPassword');
 });
+Route::get('/forum_{id}_{page}', 'ForumController@show')->name('forum');
+Route::get('/forum_group_{id}', 'ForumController@group')->name('forumGroup');

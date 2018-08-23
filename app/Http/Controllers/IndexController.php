@@ -18,7 +18,8 @@ class IndexController extends Controller
 {
     public function index()
     {
-        return 'hello world !';
+        $forumGroups = ForumGroup::with('childForums')->get();
+        return view('index.index', ['forumGroups' => $forumGroups]);
     }
 
     /**
@@ -39,7 +40,7 @@ class IndexController extends Controller
         /**
          * @var Forum $forum
          */
-        $forum = Forum::with(['childForums', 'allChildForums','avatarFile'])->find(3);
+        $forum = Forum::with(['childForums', 'allChildForums', 'avatarFile'])->find(3);
         dump($forum->toArray());
         /**
          * @var Forum $forum

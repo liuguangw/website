@@ -17,7 +17,7 @@ class CreateForumsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('forum_group_id')->comment('分区id');
             $table->string('name', 18)->comment('名称');
-            $table->string('description', 150)->comment('简要描述');
+            $table->text('description')->comment('版规');
             $table->unsignedInteger('post_count')->comment('主题总数')->default(0);
             $table->unsignedInteger('reply_count')->comment('回帖总数')->default(0);
             $table->unsignedInteger('today_post_count')->comment('今日主题总数')->default(0);
@@ -27,6 +27,7 @@ class CreateForumsTable extends Migration
             $table->unsignedInteger('order_id')->comment('排序')->default(0);
             $table->timestamps();
             $table->softDeletes();
+            $table->index(['forum_group_id']);
         });
     }
 

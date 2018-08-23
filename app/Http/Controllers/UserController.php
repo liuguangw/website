@@ -87,6 +87,16 @@ class UserController extends Controller
     }
 
     /**
+     * 无来源url的默认跳转地址
+     *
+     * @return string
+     */
+    protected function redirectTo()
+    {
+        return route('userHome');
+    }
+
+    /**
      * 登录成功的响应
      *
      * @param Request $request
