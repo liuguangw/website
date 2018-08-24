@@ -22,5 +22,6 @@ mix.styles([
     'resources/assets/css/animate.css',
     'resources/assets/css/main.css',
     'resources/assets/css/index_page.css',
-    'resources/assets/css/forum.css'
+    'resources/assets/css/forum.css',
+    'resources/assets/css/pagination.css'
 ], 'public/css/main.css');

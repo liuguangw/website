@@ -1,11 +1,6 @@
 @extends('layouts.main')
 @section('title', 'forum -'.$forum->name)
 @section('content')
-    <div>
-        @php
-            dump($forum->toArray());
-        @endphp
-    </div>
     <div class="breadcrumb">
         <ul>
             <li><a href="{{ route('home') }}">首页</a></li>
@@ -45,9 +40,6 @@
     <div class="forum-box">
         <div class="forum-header">帖子列表</div>
         <div class="forum-topic-list">
-            @php
-                $topics=$forum->topics;
-            @endphp
             @if($topics->isEmpty())
                 <div>暂无帖子</div>
             @else
@@ -72,4 +64,7 @@
             </div>
         </div>
     @endif
+    <!--分页-->
+    @component('components.pagination',['pagination'=>$pagination])
+    @endcomponent
 @endsection

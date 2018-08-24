@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Forum;
 use App\Models\ForumGroup;
+use App\Models\Topic;
 use App\Services\CaptchaService;
 use Illuminate\Http\Request;
 
@@ -35,18 +36,11 @@ class IndexController extends Controller
 
     public function debug(Request $request)
     {
-        $forumGroups = ForumGroup::with('childForums')->get();
-        dump($forumGroups->toArray());
-        /**
-         * @var Forum $forum
-         */
-        $forum = Forum::with(['childForums', 'allChildForums', 'avatarFile'])->find(3);
-        dump($forum->toArray());
-        /**
-         * @var Forum $forum
-         */
-        $forum = Forum::with('parentForums')->find(6);
-        dump($forum->toArray());
-        return '';
+        $topic = Topic::find(1);
+        $topic->title = 'test-' . now();
+        $topic->view_count += 1;
+        $topic->reply_count += 1;
+        $topic->save();
+        return $topic->toArray();
     }
 }

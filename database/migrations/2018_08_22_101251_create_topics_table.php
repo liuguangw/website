@@ -30,6 +30,7 @@ class CreateTopicsTable extends Migration
             $table->timestamp('reply_time')->nullable()->comment('帖子回复时间');
             $table->timestamp('last_modify_time')->nullable()->comment('帖子最后修改时间');
             $table->timestamp('last_active_time')->nullable()->comment('帖子最后活动时间');
+            $table->softDeletes();
             $table->index(['forum_id']);
             $table->index(['user_id']);
         });
