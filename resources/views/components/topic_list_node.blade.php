@@ -10,9 +10,28 @@
             @endif
         </a>
     </td>
-    <td class="topic-node-title"><a href="">{{ $topicInfo->title }}</a></td>
+    <td class="topic-node-title">
+        @if($topicInfo->topicType!==null)
+            <span>[</span>
+            <a class="topic-node-type"
+               href="{{ route('forum',['id'=>$topicInfo->forum_id,'type'=>$topicInfo->topic_type_id,'filter'=>'all','order'=>'common','page'=>1]) }}"
+               @if($topicInfo->topicType->color!='')
+               style="color: {{ $topicInfo->topicType->color }};"
+                @endif
+            >{{ $topicInfo->topicType->name }}</a>
+            <span>]</span>
+        @endif
+        <a href=""
+           @if($topicInfo->color!='')
+           style="color:{{ $topicInfo->color }};"
+            @endif
+        >{{ $topicInfo->title }}</a></td>
     <td class="topic-node-author">
-        <a href="">{{ $topicInfo->author->nickname }}</a>
+        <a href=""
+           @if($topicInfo->color!='')
+           style="color:{{ $topicInfo->color }};"
+            @endif
+        >{{ $topicInfo->author->nickname }}</a>
         <span>2018-6-22</span>
     </td>
     <td class="topic-node-count">

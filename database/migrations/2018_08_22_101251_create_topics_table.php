@@ -17,7 +17,7 @@ class CreateTopicsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('forum_id')->comment('所属论坛id');
             $table->unsignedInteger('user_id')->comment('用户id');
-            $table->unsignedInteger('forum_type_id')->comment('类别id');
+            $table->unsignedInteger('topic_type_id')->comment('类别id');
             $table->string('title', 30)->comment('帖子标题');
             $table->string('color', 12)->default('')->comment('颜色');
             $table->unsignedInteger('view_count')->default(0)->comment('阅读数');

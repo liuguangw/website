@@ -25,5 +25,13 @@ Route::prefix('user')->group(function () {
     Route::get('/password/modify', 'UserController@modifyPassword');
     Route::post('/password/modify', 'UserController@doModifyPassword');
 });
-Route::get('/forum_{id}_{page}', 'ForumController@show')->name('forum');
+Route::get('/forum/{id}/{type}_{filter}_{order}/{page?}', 'ForumController@show')
+    ->where([
+        'id' => '[0-9]+',
+        'type' => 'all|[0-9]+',
+        'filter' => 'all|good|top',
+        'order' => 'common|latest|hot',
+        'page' => '[0-9]+'
+    ])
+    ->name('forum');
 Route::get('/forum_group_{id}', 'ForumController@group')->name('forumGroup');

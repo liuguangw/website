@@ -42,6 +42,24 @@
     color: #369;
 }
 
+.forum-box .forum-header span.sep {
+    color: #928484;
+    padding: 0 5px;
+}
+
+.forum-box .forum-header span.sep-long {
+    color: #928484;
+    padding: 0 10px;
+}
+
+.forum-box .forum-header a.forum-order-link {
+    color: #007CD5;
+}
+
+.forum-box .forum-header span.forum-order-link {
+    color: #333;
+}
+
 .forum-box .forum-admin-list {
     line-height: 18px;
     padding: 10px;
@@ -55,7 +73,8 @@
 .forum-box .forum-intro {
     padding: 10px;
 }
-.forum-box .forum-intro p{
+
+.forum-box .forum-intro p {
     margin: 0;
 }
 
@@ -83,9 +102,16 @@
     padding-left: 8px;
     padding-right: 8px;
 }
+
 .forum-box .forum-topic-list .topic-list td.topic-node-title a {
     font-size: 15px;
 }
+
+.forum-box .forum-topic-list .topic-list td.topic-node-title a.topic-node-type,
+.forum-box .forum-topic-list .topic-list td.topic-node-title span {
+    color: #007CD5;
+}
+
 .forum-box .forum-topic-list .topic-list td.topic-node-author,
 .forum-box .forum-topic-list .topic-list td.topic-node-count,
 .forum-box .forum-topic-list .topic-list td.topic-node-last-post {
@@ -116,4 +142,57 @@
 
 .forum-box .forum-topic-list .topic-list td.topic-node-last-post {
     width: 105px;
+}
+
+.from-topic-types ul, .from-topic-types li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.from-topic-types ul {
+    margin-bottom: 5px;
+    padding-top: 10px;
+}
+
+.from-topic-types ul:after {
+    display: block;
+    content: "";
+    clear: both;
+}
+
+.from-topic-types li {
+    float: left;
+    padding-bottom: 5px;
+}
+
+.from-topic-types li > a, .from-topic-types li > span {
+    margin-right: 5px;
+    padding: 4px 8px 3px;
+    height: 18px;
+    border: 1px solid #CDCDCD;
+    background: #FFF;
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+    float: left;
+}
+
+.from-topic-types li > a:hover, .from-topic-types li > span {
+    border-color: #369;
+    color: #369;
+}
+
+.from-topic-types li > span {
+    background: #E5EDF2;
+}
+.from-topic-types li span.num{
+    background: #999;
+    padding: 0 5px;
+    margin-left: 5px;
+    border-radius: 3px;
+    color: #FFF;
+}
+.from-topic-types li > span span.num {
+    background: #91BDD3;
 }

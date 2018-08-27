@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateForumTypesTable extends Migration
+class CreateTopicTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateForumTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('forum_types', function (Blueprint $table) {
+        Schema::create('topic_types', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('forum_id')->comment('所属论坛id');
             $table->string('name', 18)->comment('类别名称');
+            $table->string('color', 12)->default('')->comment('颜色');
             $table->unsignedInteger('post_count')->default(0)->comment('帖子数量');
             $table->unsignedInteger('order_id')->default(0)->comment('排序');
             $table->timestamps();
@@ -31,6 +32,6 @@ class CreateForumTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('forum_types');
+        Schema::dropIfExists('topic_types');
     }
 }

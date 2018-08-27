@@ -14,7 +14,11 @@
 
                     <div class="forum-detail">
                         <div class="forum-name">
-                            <a href="{{ $forumInfo->link() }}">{{ $forumInfo->name }}</a>
+                            <a href="{{ $forumInfo->link() }}"
+                               @if($forumInfo->color!='')
+                               style="color:{{ $forumInfo->color }};"
+                               @endif
+                            >{{ $forumInfo->name }}</a>
                             @if($forumInfo->today_post_count>0)
                                 <span>({{ $forumInfo->today_post_count }})</span>
                             @endif

@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id 论坛id
  * @property int $forum_group_id 所属分区id
  * @property string $name 名称
+ * @property string $color 颜色
  * @property string $description 班规
  * @property int $post_count 主题总数
  * @property int $reply_count 回帖总数
@@ -37,6 +38,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \Illuminate\Database\Eloquent\Collection $topics 主题列表
  * @property-read UploadFile $avatarFile 图标文件
  * @property-read string $avatar_url 论坛图标url
+ * @property \Illuminate\Database\Eloquent\Collection $topicTypes 论坛所有帖子类型
  */
 class Forum extends Model
 {
@@ -63,7 +65,7 @@ class Forum extends Model
      *
      * @var array
      */
-    protected $appends = ['is_deleted','avatar_url'];
+    protected $appends = ['is_deleted', 'avatar_url'];
 
     /**
      * 可以被批量赋值的属性。
@@ -104,7 +106,7 @@ class Forum extends Model
 
     public function getAvatarUrlAttribute()
     {
-        if($this->avatarFile===null){
+        if ($this->avatarFile === null) {
             return asset('images/default/forum_avatar.png');
         }
         return $this->avatarFile->url;
@@ -178,12 +180,30 @@ class Forum extends Model
         return $this->hasMany(Topic::class);
     }
 
+    /**
+     * 帖子类型关联
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function topicTypes()
+    {
+        return $this->hasMany(TopicType::class);
+    }
+
     /**链接
      * @param array $params
      * @return string
      */
     public function link(array $params = [])
     {
-        return route('forum', array_merge(['id' => $this->id, 'page' => 1], $params));
+        return route('forum', array_merge(
+                [
+                    'id' => $this->id,
+                    'type' => 'all',
+                    'filter' => 'all',
+                    'order' => 'common',
+                    'page' => 1
+                ],
+                $params)
+        );
     }
 }

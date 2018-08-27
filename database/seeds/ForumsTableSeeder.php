@@ -27,7 +27,8 @@ class ForumsTableSeeder extends Seeder
                 'created_at' => $timeNow,
                 'updated_at' => $timeNow,
                 'is_root' => ($i <= 3) ? 1 : 0,
-                'deleted_at' => ($i == 2) ? $timeNow : null
+                'deleted_at' => ($i == 2) ? $timeNow : null,
+                'color' => ($i == 5) ? 'green' : ''
             ];
         }
         DB::table('forums')->insert($forums);
@@ -44,19 +45,19 @@ class ForumsTableSeeder extends Seeder
             ['parent_forum_id' => 6, 'forum_id' => 6, 'tree_deep' => 0, 'created_at' => $timeNow, 'updated_at' => $timeNow]
         ]);
         //插入默认类别
-        DB::table('forum_types')->insert([
-            ['forum_id' => 5, 'name' => '类别1', 'created_at' => $timeNow, 'updated_at' => $timeNow],
-            ['forum_id' => 5, 'name' => '类别2', 'created_at' => $timeNow, 'updated_at' => $timeNow],
-            ['forum_id' => 5, 'name' => '类别3', 'created_at' => $timeNow, 'updated_at' => $timeNow]
+        DB::table('topic_types')->insert([
+            ['forum_id' => 5, 'name' => '类别1', 'color' => '', 'post_count' => 200, 'created_at' => $timeNow, 'updated_at' => $timeNow],
+            ['forum_id' => 5, 'name' => '类别2', 'color' => 'green','post_count' => 400, 'created_at' => $timeNow, 'updated_at' => $timeNow],
+            ['forum_id' => 5, 'name' => '类别3', 'color' => 'red','post_count' => 200, 'created_at' => $timeNow, 'updated_at' => $timeNow]
         ]);
         //插入默认帖子
         $topicsArr = [];
         for ($i = 0; $i < 200; $i++) {
-            $topicsArr[] = ['forum_id' => 5, 'user_id' => 1, 'forum_type_id' => 0, 'title' => '帖子'.($i*5+1), 'color' => '', 'post_time' => $timeNow, 'last_active_time' => $timeNow];
-            $topicsArr[] = ['forum_id' => 5, 'user_id' => 1, 'forum_type_id' => 1, 'title' => '帖子'.($i*5+2), 'color' => '', 'post_time' => $timeNow, 'last_active_time' => $timeNow];
-            $topicsArr[] = ['forum_id' => 5, 'user_id' => 1, 'forum_type_id' => 1, 'title' => '帖子'.($i*5+3), 'color' => 'red', 'post_time' => $timeNow, 'last_active_time' => $timeNow];
-            $topicsArr[] = ['forum_id' => 5, 'user_id' => 1, 'forum_type_id' => 1, 'title' => '帖子'.($i*5+4), 'color' => '#000', 'post_time' => $timeNow, 'last_active_time' => $timeNow];
-            $topicsArr[] = ['forum_id' => 5, 'user_id' => 1, 'forum_type_id' => 0, 'title' => '帖子'.($i*5+5), 'color' => 'red', 'post_time' => $timeNow, 'last_active_time' => $timeNow];
+            $topicsArr[] = ['forum_id' => 5, 'user_id' => 1, 'topic_type_id' => 0, 'title' => '帖子' . ($i * 5 + 1), 'color' => '', 'post_time' => $timeNow, 'last_active_time' => $timeNow];
+            $topicsArr[] = ['forum_id' => 5, 'user_id' => 1, 'topic_type_id' => 1, 'title' => '帖子' . ($i * 5 + 2), 'color' => '', 'post_time' => $timeNow, 'last_active_time' => $timeNow];
+            $topicsArr[] = ['forum_id' => 5, 'user_id' => 1, 'topic_type_id' => 2, 'title' => '帖子' . ($i * 5 + 3), 'color' => 'red', 'post_time' => $timeNow, 'last_active_time' => $timeNow];
+            $topicsArr[] = ['forum_id' => 5, 'user_id' => 1, 'topic_type_id' => 2, 'title' => '帖子' . ($i * 5 + 4), 'color' => '#000', 'post_time' => $timeNow, 'last_active_time' => $timeNow];
+            $topicsArr[] = ['forum_id' => 5, 'user_id' => 1, 'topic_type_id' => 3, 'title' => '帖子' . ($i * 5 + 5), 'color' => 'red', 'post_time' => $timeNow, 'last_active_time' => $timeNow];
         }
         DB::table('topics')->insert($topicsArr);
         $topicsArr = null;

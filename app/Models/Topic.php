@@ -35,6 +35,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property bool $is_deleted 是否标记为已删除
  * @property-read bool $is_today_post 是否为今日发表的帖子
  * @property User $author 作者
+ * @property TopicType $topicType 帖子类别
  */
 class Topic extends Model
 {
@@ -125,5 +126,14 @@ class Topic extends Model
     public function author()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * 帖子类型关联
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function topicType()
+    {
+        return $this->belongsTo(TopicType::class);
     }
 }

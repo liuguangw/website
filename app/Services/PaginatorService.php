@@ -17,6 +17,8 @@ class PaginatorService
      * 分页数据获取
      * @param LengthAwarePaginator $paginator
      * @param callable $urlMaker
+     * @param array $params 附加url参数
+     * @param string $fragment 锚链接
      * @return array
      */
     public function links(LengthAwarePaginator $paginator, $urlMaker, $params = [], $fragment = '')

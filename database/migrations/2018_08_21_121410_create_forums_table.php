@@ -17,6 +17,7 @@ class CreateForumsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('forum_group_id')->comment('分区id');
             $table->string('name', 18)->comment('名称');
+            $table->string('color', 12)->default('')->comment('颜色');
             $table->text('description')->comment('版规');
             $table->unsignedInteger('post_count')->comment('主题总数')->default(0);
             $table->unsignedInteger('reply_count')->comment('回帖总数')->default(0);
