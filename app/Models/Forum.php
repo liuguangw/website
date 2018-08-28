@@ -27,9 +27,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $today_updated_at 今日统计数据更新时间
  * @property bool $is_root 是否为顶级论坛
  * @property int $order_id 排序
- * @property string $created_at 创建时间
- * @property string $updated_at 更新时间
- * @property string $deleted_at 删除时间
+ * @property \Illuminate\Support\Carbon $created_at 创建时间
+ * @property \Illuminate\Support\Carbon $updated_at 更新时间
+ * @property \Illuminate\Support\Carbon $deleted_at 删除时间
  * @property bool $is_deleted 是否标记为已删除
  * @property-read ForumGroup $forumGroup 论坛对应的分区
  * @property-read \Illuminate\Database\Eloquent\Collection $parentForums 上级论坛列表
@@ -205,5 +205,14 @@ class Forum extends Model
                 ],
                 $params)
         );
+    }
+
+    /**
+     * 发表帖子url
+     * @return string
+     */
+    public function createLink()
+    {
+        return action('ForumController@create', ['id' => $this->id]);
     }
 }

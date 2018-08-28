@@ -23,5 +23,6 @@ mix.styles([
     'resources/assets/css/main.css',
     'resources/assets/css/index_page.css',
     'resources/assets/css/forum.css',
-    'resources/assets/css/pagination.css'
+    'resources/assets/css/pagination.css',
+    'resources/assets/css/topic_create.css'
 ], 'public/css/main.css');

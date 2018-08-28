@@ -13,6 +13,7 @@ use App\Models\Forum;
 use App\Models\ForumGroup;
 use App\Models\Topic;
 use App\Services\CaptchaService;
+use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 
 class IndexController extends Controller
@@ -36,11 +37,9 @@ class IndexController extends Controller
 
     public function debug(Request $request)
     {
-        $topic = Topic::find(1);
-        $topic->title = 'test-' . now();
-        $topic->view_count += 1;
-        $topic->reply_count += 1;
-        $topic->save();
-        return $topic->toArray();
+        $time1=new Carbon('2018-08-28 15:56:00');
+        $time2=new Carbon('2018-08-28 16:57:00');
+        dump($time1,$time2,$time2->diffInMinutes($time1));
+        return '';
     }
 }

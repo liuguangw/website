@@ -37,6 +37,12 @@
                 7. 其他未尽事宜，请随时关注版主的相关公告贴</p>
         </div>
     </div>
+    <div class="forum-head-nav">
+        <a class="post-btn" href="{{ $forum->createLink() }}">发帖</a>
+        <!--分页-->
+        @component('components.pagination',['pagination'=>$pagination])
+        @endcomponent
+    </div>
     <div class="from-topic-types">
         @php
             $typeParams=$routeParams;
@@ -57,7 +63,8 @@
                         @if($topicTypeInfo->color!='')
                         style="color: {{ $topicTypeInfo->color }};"
                         @endif
-                    ><span>{{ $topicTypeInfo->name }}<span class="num">{{ $topicTypeInfo->post_count }}</span></span></li>
+                    ><span>{{ $topicTypeInfo->name }}<span class="num">{{ $topicTypeInfo->post_count }}</span></span>
+                    </li>
                 @else
                     <li><a href="{{ route('forum',$typeParams) }}"
                            @if($topicTypeInfo->color!='')

@@ -9,6 +9,7 @@
 namespace App\Models;
 
 
+use App\Traits\TimeFormatTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -18,7 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id 帖子id
  * @property int $forum_id 论坛id
  * @property int $user_id 作者用户id
- * @property int $forum_type_id 类别id
+ * @property int $topic_type_id 类别id
  * @property string $title 帖子标题
  * @property string $color 帖子颜色
  * @property int $view_count 阅读数
@@ -27,11 +28,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property bool $t_disabled 是否被屏蔽
  * @property bool $t_locked 是否被锁定
  * @property bool $t_good 是否为精华帖
- * @property string $post_time 帖子发布时间
- * @property string $reply_time 帖子最后回复时间
- * @property string $last_modify_time 帖子最后修改时间
- * @property string $last_active_time 帖子最后活动时间
- * @property string $deleted_at 帖子删除时间
+ * @property \Illuminate\Support\Carbon $post_time 帖子发布时间
+ * @property \Illuminate\Support\Carbon $reply_time 帖子最后回复时间
+ * @property \Illuminate\Support\Carbon $last_modify_time 帖子最后修改时间
+ * @property \Illuminate\Support\Carbon $last_active_time 帖子最后活动时间
+ * @property \Illuminate\Support\Carbon $deleted_at 帖子删除时间
  * @property bool $is_deleted 是否标记为已删除
  * @property-read bool $is_today_post 是否为今日发表的帖子
  * @property User $author 作者
@@ -40,6 +41,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Topic extends Model
 {
     use SoftDeletes;
+    use TimeFormatTrait;
 
     /**
      * 不使用默认时间配置

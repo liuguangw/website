@@ -32,7 +32,7 @@
            style="color:{{ $topicInfo->color }};"
             @endif
         >{{ $topicInfo->author->nickname }}</a>
-        <span>2018-6-22</span>
+        <span>{{ $topicInfo->formatTime($topicInfo->post_time) }}</span>
     </td>
     <td class="topic-node-count">
         <a href="">{{ $topicInfo->reply_count }}</a>
@@ -40,6 +40,12 @@
     </td>
     <td class="topic-node-last-post">
         <a href="">{{ $topicInfo->author->nickname }}</a>
-        <span>4天前</span>
+        <span>
+            @if($topicInfo->reply_time===null)
+                -
+            @else
+                {{ $topicInfo->formatTime($topicInfo->reply_time) }}
+            @endif
+        </span>
     </td>
 </tr>

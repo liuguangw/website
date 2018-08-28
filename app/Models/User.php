@@ -24,9 +24,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property int $reply_count 回帖数量
  * @property int $exp_count 经验值
  * @property int $coin_count 金币值
- * @property string $created_at 注册时间
- * @property string $updated_at 更新时间
- * @property string $deleted_at 删除时间
+ * @property \Illuminate\Support\Carbon $created_at 注册时间
+ * @property \Illuminate\Support\Carbon $updated_at 更新时间
+ * @property \Illuminate\Support\Carbon $deleted_at 删除时间
  * @property bool $is_deleted 是否标记为已删除
  * @property-read UploadFile $avatarFile 头像文件
  * @property-read string $avatar_url 头像url

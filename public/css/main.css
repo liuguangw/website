@@ -3967,6 +3967,7 @@ template {
 * {
     word-wrap: break-word;
 }
+
 .site-warp {
     min-width: 600px;
     max-width: 1100px;
@@ -3974,12 +3975,34 @@ template {
     font-size: 12px;
     line-height: 1.5;
 }
+
 a {
     color: #333;
     text-decoration: none;
 }
-a:hover{
+
+a:hover {
     text-decoration: underline;
+}
+
+.clearfix:after {
+    display: block;
+    content: "";
+    clear: both;
+}
+
+/*错误提示框*/
+.alert {
+    position: relative;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+}
+
+.alert-danger {
+    color: #fb6a78;
+    border-color: #e63d4f;
 }
 
 .forum-group-list .forum-group {
@@ -4285,15 +4308,42 @@ a:hover{
 .from-topic-types li > span {
     background: #E5EDF2;
 }
-.from-topic-types li span.num{
+
+.from-topic-types li span.num {
     background: #999;
     padding: 0 5px;
     margin-left: 5px;
     border-radius: 3px;
     color: #FFF;
 }
+
 .from-topic-types li > span span.num {
     background: #91BDD3;
+}
+
+.forum-head-nav {
+    display: block;
+    height: 36px;
+    position: relative;
+}
+
+.forum-head-nav .post-btn {
+    position: absolute;
+    display: block;
+    height: 34px;
+    line-height: 34px;
+    padding: 0 18px;
+    border: 1px solid #eee;
+    background-color: #28a745;
+    background-image: linear-gradient(-180deg, #34d058 0%, #28a745 90%);
+    color: #fff;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.forum-head-nav .post-btn:hover {
+    background-color: #269f42;
+    background-image: linear-gradient(-180deg, #2fcb53 0%, #269f42 90%);
 }
 
 /*分页样式*/
@@ -4320,4 +4370,74 @@ a:hover{
 
 .pagination > .pagination-item-current {
     font-weight: bolder;
+}
+
+.topic-title-edit .types-warp {
+    float: left;
+    padding-right: 10px;
+}
+
+.topic-title-edit .title-warp {
+    float: left;
+}
+
+.topic-title-edit select,
+.topic-title-edit input {
+    height: 20px;
+    line-height: 20px;
+    padding: 6px 12px;
+    border: 1px solid #d1d5da;
+    font-size: 14px;
+    box-sizing: content-box;
+    display: block;
+}
+
+.topic-title-edit input {
+    width: 30em;
+}
+
+.topic-title-edit select.error,
+.topic-title-edit input.error {
+    border-color: red;
+}
+
+.topic-content-edit {
+    margin-top: 15px;
+}
+
+.topic-content-edit textarea {
+    width: 100%;
+    min-height: 500px;
+    box-sizing: border-box;
+    padding: 8px;
+    border: 1px solid #ccc;
+    resize: none;
+}
+
+.topic-content-edit textarea.error {
+    border-color: red;
+}
+
+.topic-btns {
+    margin-top: 15px;
+}
+
+.topic-btns button {
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    color: #fff;
+    background-color: #0062cc;
+    border: 1px solid #005cbf;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.5;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.topic-btns button:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
 }

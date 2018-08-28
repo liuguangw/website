@@ -11,8 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $parent_forum_id 上级论坛id
  * @property int $forum_id 论坛id
  * @property int tree_deep 结构深度
- * @property string $created_at 创建时间
- * @property string $updated_at 更新时间
+ * @property \Illuminate\Support\Carbon $created_at 创建时间
+ * @property \Illuminate\Support\Carbon $updated_at 更新时间
  */
 class ForumTree extends Model
 {

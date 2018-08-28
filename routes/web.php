@@ -34,4 +34,6 @@ Route::get('/forum/{id}/{type}_{filter}_{order}/{page?}', 'ForumController@show'
         'page' => '[0-9]+'
     ])
     ->name('forum');
+Route::get('/forum/{id}/create', 'ForumController@create');
+Route::post('/forum/topics', 'ForumController@store');
 Route::get('/forum_group_{id}', 'ForumController@group')->name('forumGroup');

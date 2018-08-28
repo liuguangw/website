@@ -1,6 +1,7 @@
 * {
     word-wrap: break-word;
 }
+
 .site-warp {
     min-width: 600px;
     max-width: 1100px;
@@ -8,10 +9,32 @@
     font-size: 12px;
     line-height: 1.5;
 }
+
 a {
     color: #333;
     text-decoration: none;
 }
-a:hover{
+
+a:hover {
     text-decoration: underline;
+}
+
+.clearfix:after {
+    display: block;
+    content: "";
+    clear: both;
+}
+
+/*错误提示框*/
+.alert {
+    position: relative;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+}
+
+.alert-danger {
+    color: #fb6a78;
+    border-color: #e63d4f;
 }

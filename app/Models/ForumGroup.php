@@ -18,9 +18,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id 分区id
  * @property string $name 名称
  * @property int $order_id 排序
- * @property string $created_at 创建时间
- * @property string $updated_at 更新时间
- * @property string $deleted_at 删除时间
+ * @property \Illuminate\Support\Carbon $created_at 创建时间
+ * @property \Illuminate\Support\Carbon $updated_at 更新时间
+ * @property \Illuminate\Support\Carbon $deleted_at 删除时间
  * @property bool $is_deleted 是否标记为已删除
  * @property-read \Illuminate\Database\Eloquent\Collection $childForums 直接子论坛列表
  * @property-read \Illuminate\Database\Eloquent\Collection $allChildForums 所有子论坛列表
