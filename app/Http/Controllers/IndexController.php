@@ -11,7 +11,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Forum;
 use App\Models\ForumGroup;
+use App\Models\Reply;
 use App\Models\Topic;
+use App\Models\User;
 use App\Services\CaptchaService;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
@@ -37,9 +39,16 @@ class IndexController extends Controller
 
     public function debug(Request $request)
     {
-        $time1=new Carbon('2018-08-28 15:56:00');
-        $time2=new Carbon('2018-08-28 16:57:00');
-        dump($time1,$time2,$time2->diffInMinutes($time1));
+        $destId = rand(1, 1000);
+        $destId = 380;
+        $topic = Topic::find($destId);
+        $user = User::find(1);
+        $reply = new Reply();
+        $reply->author()->associate($user);
+        $reply->topic()->associate($topic);
+        $reply->content = 'hello at ' . now()->toDateTimeString();
+        $topic->replies()->save($reply);
+        dump($topic->toArray());
         return '';
     }
 }

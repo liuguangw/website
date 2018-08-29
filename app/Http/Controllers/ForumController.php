@@ -9,25 +9,12 @@
 namespace App\Http\Controllers;
 
 
-use App\Http\Requests\TopicCreate;
 use App\Models\Forum;
 use App\Models\ForumGroup;
-use App\Models\Topic;
 use App\Services\PaginatorService;
-use Illuminate\Http\Request;
 
 class ForumController extends Controller
 {
-    public function needLogin()
-    {
-        return true;
-    }
-
-    protected function useAuthMiddleware()
-    {
-        //这些操作需要登录
-        parent::useAuthMiddleware()->only(['create', 'store']);
-    }
 
     /**
      * @param PaginatorService $paginatorService
@@ -89,26 +76,5 @@ class ForumController extends Controller
 
         $groupInfo = ForumGroup::with('childForums')->findOrFail($id);
         return view('forum.group', ['groupInfo' => $groupInfo]);
-    }
-
-    public function create($id)
-    {
-        $forum = Forum::with(['topicTypes'])->findOrFail($id);
-        return view('forum.topic_create_and_edit', [
-            'forum' => $forum,
-            'actionUrl' => action('ForumController@store')
-        ]);
-    }
-
-    public function store(TopicCreate $request)
-    {
-        $formRequest = $request->request;
-        $topic = new Topic();
-        $topic->title = $formRequest->get('title', '');
-        $topic->forum_id = intval($formRequest->get('forum_id', 0));
-        $topic->user_id = $request->user()->id;
-        $topic->topic_type_id = intval($formRequest->get('topic_type', 0));
-        $topic->save();
-        return $topic->toArray();
     }
 }

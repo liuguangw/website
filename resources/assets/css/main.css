@@ -25,6 +25,10 @@ a:hover {
     clear: both;
 }
 
+.center {
+    text-align: center;
+}
+
 /*错误提示框*/
 .alert {
     position: relative;

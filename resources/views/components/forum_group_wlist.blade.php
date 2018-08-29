@@ -17,7 +17,7 @@
                             <a href="{{ $forumInfo->link() }}"
                                @if($forumInfo->color!='')
                                style="color:{{ $forumInfo->color }};"
-                               @endif
+                                @endif
                             >{{ $forumInfo->name }}</a>
                             @if($forumInfo->today_post_count>0)
                                 <span>({{ $forumInfo->today_post_count }})</span>
@@ -40,9 +40,9 @@
 
                 </td>
                 <td class="count-nav">
-                    <span class="c1">19万</span>
-                    <span class="c2">/</span>
-                    <span class="c2">261万</span>
+                    <span class="c1">{{ $forumInfo->post_count }}</span>
+                    <span class="c2"> / </span>
+                    <span class="c2">{{ $forumInfo->reply_count }}</span>
                 </td>
                 <td class="last-post-nav">
                     <div class="forum-latest-post">

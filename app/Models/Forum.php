@@ -211,8 +211,47 @@ class Forum extends Model
      * 发表帖子url
      * @return string
      */
-    public function createLink()
+    public function createTopicLink()
     {
-        return action('ForumController@create', ['id' => $this->id]);
+        return action('TopicController@create', ['id' => $this->id]);
+    }
+
+    /**
+     * 更新今日统计数据
+     * @return void
+     */
+    public function updateTodayData()
+    {
+        $beginTime = today();
+        $this->today_post_count = Topic::where('forum_id', $this->id)->where('post_time', '>', $beginTime)->count();
+        $this->today_reply_count = Reply::query()->leftJoin('topic', 'replies.topic_id', '=', 'topic.id')->where('topic.forum_id', $this->id)->count();
+        $this->today_updated_at = now();
+        $this->save();
+    }
+
+    /**
+     * 处理论坛新帖发表记录
+     * @return void
+     */
+    public function onNewPost()
+    {
+        $this->increment('post_count');
+        if ($this->today_updated_at->lt(today())) {
+            $this->updateTodayData();
+        }
+        $this->increment('today_post_count');
+    }
+
+    /**
+     * 处理论坛新的回复
+     * @return void
+     */
+    public function onNewReply()
+    {
+        $this->increment('reply_count');
+        if ($this->today_updated_at->lt(today())) {
+            $this->updateTodayData();
+        }
+        $this->increment('today_reply_count');
     }
 }

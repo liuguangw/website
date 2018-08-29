@@ -24,5 +24,6 @@ mix.styles([
     'resources/assets/css/index_page.css',
     'resources/assets/css/forum.css',
     'resources/assets/css/pagination.css',
-    'resources/assets/css/topic_create.css'
+    'resources/assets/css/topic_create.css',
+    'resources/assets/css/topic.css'
 ], 'public/css/main.css');

@@ -13,7 +13,9 @@
                 @endforeach
             @endunless
             <li class="sep">&rsaquo;</li>
-            <li>{{ $forum->name }}</li>
+            <li><a href="{{ $forum->link() }}">{{ $forum->name }}</a></li>
+            <li class="sep">&rsaquo;</li>
+            <li>发表帖子</li>
         </ul>
     </div>
     @if ($errors->any())

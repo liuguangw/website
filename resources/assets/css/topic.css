@@ -1,0 +1,142 @@
+/*帖子内页*/
+.forum-topic-warp {
+    border: 1px solid #cdcdcd;
+    margin-bottom: 20px;
+}
+
+.forum-topic-warp table {
+    width: 100%;
+    empty-cells: show;
+    border-collapse: collapse;
+}
+
+.forum-topic-warp table tr td {
+    border-bottom: 4px solid #e5edf2;
+    padding: 0 20px;
+    vertical-align: top;
+}
+
+.forum-topic-warp table tr:first-child td {
+    vertical-align: middle;
+}
+
+.forum-topic-warp table tr:last-child td {
+    border-bottom: none;
+}
+
+.forum-topic-warp .left-side {
+    width: 160px;
+    background: #E5EDF2;
+    overflow: hidden;
+    border-right: 1px solid #C2D5E3;
+    border-bottom-color: #c2d5e3;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.forum-topic-warp .left-side .topic-info {
+    text-align: center;
+    padding: 5px 0;
+}
+
+.forum-topic-warp .left-side .topic-info .t-text {
+    color: #999;
+}
+
+.forum-topic-warp .left-side .topic-info .t-sep {
+    margin: 0 5px;
+    color: #CCC;
+}
+
+.forum-topic-warp .left-side .topic-info .t-num {
+    color: #F26C4F;
+}
+
+.forum-topic-warp .topic-title h1 {
+    display: inline;
+    font: 700 16px 'Microsoft Yahei', 'Hei', Tahoma, 'SimHei', sans-serif;
+}
+
+.forum-topic-warp .author-info .author-nickname {
+    padding: 10px 0 10px 15px;
+    margin-bottom: 10px;
+    height: 16px;
+    border-bottom: 1px dashed #CDCDCD;
+}
+
+.forum-topic-warp .author-info .author-nickname a {
+    font-weight: 700;
+}
+
+.forum-topic-warp .author-info .author-avatar {
+    padding-bottom: 10px;
+}
+
+.forum-topic-warp .author-info .author-avatar a {
+    padding: 5px 5px 8px 5px;
+    width: 120px;
+    height: 120px;
+    background-color: #fff;
+    display: block;
+    text-decoration: none;
+    margin: 0 auto;
+    box-shadow: 0px 2px 3px #d4d4d4;
+}
+
+.forum-topic-warp .author-info .author-avatar a img {
+    width: 100%;
+    height: 100%;
+}
+
+.forum-topic-warp .post-detail .post-meta {
+    overflow: hidden;
+    margin-bottom: 10px;
+    padding: 10px 0;
+    height: 16px;
+    border-bottom: 1px dashed #cdcdcd;
+}
+
+.forum-topic-warp .post-detail .post-meta a.floor-num {
+    float: right;
+    margin-top: -6px;
+    padding: 4px 6px;
+    border: 1px solid #FFF;
+    font-weight: 400;
+    display: block;
+}
+
+.forum-topic-warp .post-detail .post-meta a.floor-num:hover {
+    border-color: #CDCDCD;
+}
+
+.forum-topic-warp .post-detail .post-meta a.floor-num em {
+    font-style: normal;
+}
+
+.forum-topic-warp .author-info p,
+.forum-topic-warp .author-info .user-meta {
+    margin: 5px 10px 5px 20px;
+}
+
+.forum-topic-warp .author-info .user-meta:after {
+    display: block;
+    content: "";
+    clear: both;
+}
+
+.forum-topic-warp .author-info .user-meta dt,
+.forum-topic-warp .author-info .user-meta dd {
+    float: left;
+    height: 19px;
+    line-height: 19px;
+}
+
+.forum-topic-warp .author-info .user-meta dt {
+    margin-right: 3px;
+    width: 55px;
+}
+
+.forum-topic-warp .author-info .user-meta dd {
+    margin: 0;
+    width: 70px;
+}

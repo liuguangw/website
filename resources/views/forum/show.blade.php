@@ -38,7 +38,7 @@
         </div>
     </div>
     <div class="forum-head-nav">
-        <a class="post-btn" href="{{ $forum->createLink() }}">发帖</a>
+        <a class="post-btn" href="{{ $forum->createTopicLink() }}">发帖</a>
         <!--分页-->
         @component('components.pagination',['pagination'=>$pagination])
         @endcomponent

@@ -37,6 +37,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read bool $is_today_post 是否为今日发表的帖子
  * @property User $author 作者
  * @property TopicType $topicType 帖子类别
+ * @property TopicContent $topicContent 帖子内容
+ * @property Forum $forum 所属论坛
+ * @property \Illuminate\Database\Eloquent\Collection $replies 所有回复
  */
 class Topic extends Model
 {
@@ -137,5 +140,42 @@ class Topic extends Model
     public function topicType()
     {
         return $this->belongsTo(TopicType::class);
+    }
+
+    /**
+     * 帖子内容关联
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function topicContent()
+    {
+        return $this->hasOne(TopicContent::class);
+    }
+
+    /**
+     * 论坛关联
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function forum()
+    {
+        return $this->belongsTo(Forum::class);
+    }
+
+    /**
+     * 回复关联
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function replies()
+    {
+        return $this->hasMany(Reply::class);
+    }
+
+    /**
+     * 帖子链接
+     * @param int $page 页码,默认1
+     * @return string
+     */
+    public function link(int $page = 1)
+    {
+        return action('TopicController@show', ['id' => $this->id, 'page' => $page]);
     }
 }

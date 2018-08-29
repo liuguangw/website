@@ -21,7 +21,7 @@
             >{{ $topicInfo->topicType->name }}</a>
             <span>]</span>
         @endif
-        <a href=""
+        <a href="{{ $topicInfo->link() }}"
            @if($topicInfo->color!='')
            style="color:{{ $topicInfo->color }};"
             @endif
