@@ -224,7 +224,7 @@ class Forum extends Model
     {
         $beginTime = today();
         $this->today_post_count = Topic::where('forum_id', $this->id)->where('post_time', '>', $beginTime)->count();
-        $this->today_reply_count = Reply::query()->leftJoin('topic', 'replies.topic_id', '=', 'topic.id')->where('topic.forum_id', $this->id)->count();
+        $this->today_reply_count = Reply::query()->leftJoin('topics', 'replies.topic_id', '=', 'topics.id')->where('topics.forum_id', $this->id)->count();
         $this->today_updated_at = now();
         $this->save();
     }

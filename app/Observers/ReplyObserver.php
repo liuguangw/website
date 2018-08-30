@@ -37,7 +37,7 @@ class ReplyObserver
         //论坛:reply+1
         $topic->forum->onNewReply();
         //用户:reply+1
-        $reply->author->increment('post_count');
+        $reply->author->increment('reply_count');
 
     }
 }

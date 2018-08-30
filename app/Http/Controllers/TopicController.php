@@ -13,6 +13,7 @@ use App\Models\Forum;
 use App\Models\Topic;
 use App\Models\TopicContent;
 use App\Http\Requests\TopicCreate;
+use App\Services\PaginatorService;
 
 class TopicController extends Controller
 {
@@ -57,15 +58,35 @@ class TopicController extends Controller
         return $topic->toArray();
     }
 
-    public function show(int $id, int $page)
+    /**
+     * 帖子详情页
+     * @param PaginatorService $paginatorService
+     * @param int $id
+     * @param int $page
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function show(PaginatorService $paginatorService, int $id, int $page)
     {
         $topic = Topic::with(['forum', 'author', 'TopicType', 'topicContent', 'replies'])->findOrFail($id);
+        $builder = $topic->replies()->with('author')->orderBy('id');
+        $replies = $builder->paginate(3, ['*'], 'page', $page);
+        if (($page < 1) || ($page > $replies->lastPage())) {
+            abort(404);
+        }
+        $routeParams = ['id' => $id];
+        $pagination = $paginatorService->links($replies, function (int $page, array $params = []) {
+            $params['page'] = $page;
+            return action('TopicController@show', $params);
+        }, $routeParams);
         return view('topic.show', [
             'topic' => $topic,
+            'topicType' => $topic->topicType,
             'forum' => $topic->forum,
             'topicAuthor' => $topic->author,
             'content' => $topic->topicContent->content,
-            'replies' => $topic->replies
+            'replies' => $replies,
+            'pagination' => $pagination,
+            'page' => $page
         ]);
     }
 }

@@ -47,8 +47,8 @@ class IndexController extends Controller
         $reply->author()->associate($user);
         $reply->topic()->associate($topic);
         $reply->content = 'hello at ' . now()->toDateTimeString();
-        $topic->replies()->save($reply);
-        dump($topic->toArray());
+        $reply->save();
+        dump($topic->toArray(),$request->session()->all());
         return '';
     }
 }
