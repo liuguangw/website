@@ -19,6 +19,17 @@ use Illuminate\Support\Facades\Auth;
  */
 class ReplyController extends Controller
 {
+    public function needLogin()
+    {
+        return true;
+    }
+
+    protected function useAuthMiddleware()
+    {
+        //这些操作需要登录
+        parent::useAuthMiddleware()->only(['store']);
+    }
+
     public function store(ReplyCreate $request)
     {
         $reply = new Reply();
