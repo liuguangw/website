@@ -41,3 +41,4 @@ Route::get('/forum/topic/{id}/{page}', 'TopicController@show')->where([
     'id' => '[0-9]+',
     'page' => '[0-9]+'
 ]);
+Route::post('/forum/replies', 'ReplyController@store');

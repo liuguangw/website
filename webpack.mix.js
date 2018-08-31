@@ -21,6 +21,7 @@ mix.styles([
     'resources/assets/css/normalize.css',
     'resources/assets/css/animate.css',
     'resources/assets/css/main.css',
+    'resources/assets/css/alert.css',
     'resources/assets/css/index_page.css',
     'resources/assets/css/forum.css',
     'resources/assets/css/pagination.css',

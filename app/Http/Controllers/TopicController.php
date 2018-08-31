@@ -55,7 +55,8 @@ class TopicController extends Controller
         $topicContent = new TopicContent();
         $topicContent->content = $formRequest->get('content', '');
         $topic->topicContent()->save($topicContent);
-        return $topic->toArray();
+        return redirect()->route('forum', ['id' => $topic->forum_id, 'type' => 'all', 'filter' => 'all', 'order' => 'common', 'page' => 1]);
+        //return $topic->toArray();
     }
 
     /**
@@ -69,7 +70,7 @@ class TopicController extends Controller
     {
         $topic = Topic::with(['forum', 'author', 'TopicType', 'topicContent', 'replies'])->findOrFail($id);
         $builder = $topic->replies()->with('author')->orderBy('id');
-        $replies = $builder->paginate(3, ['*'], 'page', $page);
+        $replies = $builder->paginate(15, ['*'], 'page', $page);
         if (($page < 1) || ($page > $replies->lastPage())) {
             abort(404);
         }

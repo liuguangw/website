@@ -18,11 +18,6 @@
             <li><a href="{{ $topic->link() }}" style="color: #333;">{{ $topic->title }}</a></li>
         </ul>
     </div>
-    <pre>
-        @php
-            dump($topic->toArray());
-        @endphp
-    </pre>
     <div class="topic-reply-btns clearfix">
         <div class="btns">
             <a class="btn-post" href="{{ action('TopicController@create',['id'=>$forum->id]) }}">发帖</a>
@@ -140,50 +135,59 @@
         @component('components.pagination',['pagination'=>$pagination])
         @endcomponent
     </div>
-    <table class="dialog reply-dialog" cellpadding="0" cellspacing="0" style="display: none;">
-        <tr>
-            <td class="dialog-border b-topleft"></td>
-            <td class="dialog-border b-top"></td>
-            <td class="dialog-border b-topright"></td>
-        </tr>
-        <tr>
-            <td class="dialog-border b-left"></td>
-            <td>
-                <div class="dialog-warp">
-                    <a class="dialog-close-icon" href="javascript:void(0)" onclick="hideDialog(this);"></a>
-                    <h3>参与/回复主题</h3>
-                    <div class="re-text"></div>
-                    <div class="reply-edit">
-                        <textarea></textarea>
+    @component('components.dialog',['extClass'=>' reply-dialog'])
+        <form method="post" action="{{ action('ReplyController@store') }}">
+            @csrf
+            <div class="dialog-warp">
+                <a class="dialog-close-icon" href="javascript:void(0)" onclick="hideDialog(this);"></a>
+                <h3>参与/回复主题</h3>
+                <input type="hidden" name="to_floor_id" value="0"/>
+                <input type="hidden" name="topic_id" value="{{ $topic->id }}"/>
+                <div class="reply-edit">
+                    <textarea name="content"></textarea>
+                </div>
+                <div class="reply-captcha">
+                    <span>验证码</span>
+                    <input type="text" name="captcha_code" value="" placeholder="输入验证码" autocomplete="off"/>
+                    <a href="javascript:void(0)">换一个</a>
+                    <div class="reply-captcha-warp" style="display: none;">
+                        <div>请输入下图中的字符</div>
+                        <div><img src="{{ asset('images/loading.gif') }}" alt="验证码"/></div>
                     </div>
                 </div>
-                <div class="dialog-footer">
-                    <a href="">本版积分规则</a>
-                    <button class="dialog-btn" type="button">参与/回复主题</button>
-                </div>
-            </td>
-            <td class="dialog-border b-right"></td>
-        </tr>
-        <tr>
-            <td class="dialog-border b-bottomleft"></td>
-            <td class="dialog-border b-bottom"></td>
-            <td class="dialog-border b-bottomright"></td>
-        </tr>
-    </table>
+            </div>
+            <div class="dialog-footer">
+                <a href="">本版积分规则</a>
+                <button class="dialog-btn" type="submit">参与/回复主题</button>
+            </div>
+        </form>
+    @endcomponent
+    @if($errors->any())
+        @component('components.alert_dialog',['alertId'=>'topic_error_dialog','alertClass'=>'alert-danger','errors'=>$errors])
+        @endcomponent
+    @endif
+    @if(\Illuminate\Support\Facades\Session::has('reply_success'))
+        @component('components.alert_dialog',['alertId'=>'topic_success_dialog','alertClass'=>'alert-success','errors'=>null])
+            回复成功
+        @endcomponent
+    @endif
 @endsection
 @section('scripts')
     <script type="text/javascript" src="{{ asset('js/main.js') }}"></script>
     <script type="text/javascript">
         var fadeInAnimated = "animated faster pulse",
-            fadeOutAnimated = "animated faster bounceOutLeft";
+            fadeOutAnimated = "animated faster fadeOutUp";
         var dialogEl = document.getElementsByClassName("reply-dialog").item(0);
         bindDragEvent(dialogEl);
 
-        function showReplyDialog() {
+        function showReplyDialog(floor_id) {
+            var formEl = dialogEl.getElementsByTagName("form").item(0);
+            formEl.to_floor_id.value = floor_id;
+            formEl.content.value = "";
             if (dialogEl.style.display == "none") {
-                dialogEl.style.left = (window.innerWidth - 638) / 2 + "px";
-                dialogEl.className += (" " + fadeInAnimated);
                 dialogEl.style.display = "table";
+                centerDialog(dialogEl);
+                dialogEl.className += (" " + fadeInAnimated);
             }
         }
 
@@ -194,5 +198,79 @@
             }
             oDialog.style.display = "none";
         }
+
+        var captchaNav = document.getElementsByClassName("reply-captcha").item(0);
+        var captchaWarp = captchaNav.getElementsByClassName("reply-captcha-warp").item(0);
+        var captchaInited = false;
+
+        function reloadCaptcha() {
+            /*删除旧验证码节点*/
+            var parentEl = captchaWarp.getElementsByTagName("div").item(1);
+            var oldImgElement = parentEl.getElementsByTagName("img").item(0);
+            parentEl.removeChild(oldImgElement);
+            /*显示加载中*/
+            var loadingEl = document.createElement("img");
+            parentEl.appendChild(loadingEl);
+            loadingEl.alt = "加载中";
+            loadingEl.title = "加载中";
+            loadingEl.src = "{{ asset('images/loading.gif') }}";
+            /*加载新验证码*/
+            var imgElement = document.createElement("img");
+            imgElement.alt = "图形验证码";
+            imgElement.title = "点击刷新";
+            imgElement.addEventListener("load", function () {
+                parentEl.removeChild(parentEl.getElementsByTagName("img").item(0));
+                parentEl.appendChild(imgElement);
+                captchaInited = true;
+            });
+            imgElement.addEventListener("click", reloadCaptcha);
+            imgElement.src = "{{ route('captcha') }}?r=" + Math.random();
+        }
+
+        captchaNav.addEventListener("mouseleave", function () {
+            if (captchaWarp.style.display != "none") {
+                captchaWarp.style.display = "none";
+            }
+        });
+        var focusFn = function () {
+            if (captchaWarp.style.display == "none") {
+                if (!captchaInited) {
+                    reloadCaptcha();
+                }
+                captchaWarp.style.display = "block";
+            }
+        };
+        captchaNav.getElementsByTagName("input").item(0).addEventListener("focus", focusFn);
+        captchaNav.getElementsByTagName("input").item(0).addEventListener("mousedown", focusFn);
+        captchaNav.getElementsByTagName("a").item(0).addEventListener("click", function () {
+            reloadCaptcha();
+        });
+        @if($errors->any())
+        (function () {
+            var errorDialogEl = document.getElementById("topic_error_dialog");
+            centerDialog(errorDialogEl);
+            setTimeout(function () {
+                errorDialogEl.className = "alert-dialog " + fadeOutAnimated;
+                var parentEl = errorDialogEl.parentNode;
+                setTimeout(function () {
+                    parentEl.removeChild(errorDialogEl);
+                }, 500);
+            }, 1900);
+        })();
+        @endif
+
+            @if(\Illuminate\Support\Facades\Session::has('reply_success'))
+        (function () {
+            var opDialogEl = document.getElementById("topic_success_dialog");
+            centerDialog(opDialogEl);
+            setTimeout(function () {
+                opDialogEl.className = "alert-dialog " + fadeOutAnimated;
+                var parentEl = opDialogEl.parentNode;
+                setTimeout(function () {
+                    parentEl.removeChild(opDialogEl);
+                }, 500);
+            }, 900);
+        })();
+        @endif
     </script>
 @endsection

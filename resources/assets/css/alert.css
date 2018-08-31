@@ -1,0 +1,28 @@
+/*错误提示*/
+.alert {
+    position: relative;
+    padding: .75rem 1.25rem;
+    border: 1px solid transparent;
+    border-radius: 5px;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+/*错误提示悬浮框*/
+.alert-dialog {
+    position: fixed;
+    width: 560px;
+    display: block;
+    box-shadow: 2px 2px 3px #968b8b;
+    border-radius: 5px;
+}

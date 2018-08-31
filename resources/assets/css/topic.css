@@ -283,8 +283,6 @@
     empty-cells: show;
     border-collapse: collapse;
     padding: 0;
-    left: 50%;
-    top: 50px;
 }
 
 .dialog .dialog-border {
@@ -369,6 +367,40 @@
     outline: none;
 }
 
+.dialog.reply-dialog .dialog-warp .reply-captcha {
+    margin-top: 10px;
+    position: relative;
+    line-height: 18px;
+}
+
+.dialog.reply-dialog .dialog-warp .reply-captcha input {
+    width: 100px;
+    height: 17px;
+    padding: 2px 4px;
+    line-height: 17px;
+    border: 1px solid;
+    border-color: #848484 #E0E0E0 #E0E0E0 #848484;
+}
+
+.dialog.reply-dialog .dialog-warp .reply-captcha a {
+    color: #369;
+}
+
+.dialog.reply-dialog .dialog-warp .reply-captcha .reply-captcha-warp {
+    position: absolute;
+    z-index: 301;
+    left: 40px;
+    top: 22px;
+    background-color: #FEFEFE;
+    width: 150px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    box-shadow: 1px 2px 2px #ece3e3;
+}
+.dialog.reply-dialog .dialog-warp .reply-captcha .reply-captcha-warp img{
+    max-height: 40px;
+    cursor: pointer;
+}
 .dialog.reply-dialog .dialog-footer {
     padding: 8px 10px;
     height: 26px;

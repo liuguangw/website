@@ -28,17 +28,3 @@ a:hover {
 .center {
     text-align: center;
 }
-
-/*错误提示框*/
-.alert {
-    position: relative;
-    padding: .75rem 1.25rem;
-    margin-bottom: 1rem;
-    border: 1px solid transparent;
-    border-radius: .25rem;
-}
-
-.alert-danger {
-    color: #fb6a78;
-    border-color: #e63d4f;
-}
