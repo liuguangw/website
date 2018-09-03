@@ -46,19 +46,15 @@
     <div class="from-topic-types">
         @php
             $typeParams=$routeParams;
-        $typeParams['type']='all';
         @endphp
         <ul>
-            @if($routeParams['type']=='all')
+            @if($extraParams['type']=='all')
                 <li class="active"><span>全部</span></li>
             @else
-                <li><a href="{{ route('forum',$typeParams) }}">全部</a></li>
+                <li><a href="{{ $forum->link() }}">全部</a></li>
             @endif
             @foreach($forum->topicTypes as $topicTypeInfo)
-                @php
-                    $typeParams['type']=$topicTypeInfo->id;
-                @endphp
-                @if($routeParams['type']==$typeParams['type'])
+                @if($extraParams['type']==$topicTypeInfo->id)
                     <li class="active"
                         @if($topicTypeInfo->color!='')
                         style="color: {{ $topicTypeInfo->color }};"
@@ -66,7 +62,7 @@
                     ><span>{{ $topicTypeInfo->name }}<span class="num">{{ $topicTypeInfo->post_count }}</span></span>
                     </li>
                 @else
-                    <li><a href="{{ route('forum',$typeParams) }}"
+                    <li><a href="{{ $forum->link(['type' => $topicTypeInfo->id]) }}"
                            @if($topicTypeInfo->color!='')
                            style="color: {{ $topicTypeInfo->color }};"
                             @endif
@@ -77,62 +73,67 @@
     </div>
     <div class="forum-box">
         @php
+            if($extraParams['type']!='all'){
+                $routeParams['type']=$extraParams['type'];
+            }
             $orderRouteParams=$filterParams=$routeParams;
-            $filterLinks=[];
-            $filterParams['filter']='all';
-            $filterLinks[]=route('forum',$filterParams);
-            $filterParams['filter']='good';
-            $filterLinks[]=route('forum',$filterParams);
-            $filterParams['filter']='top';
-            $filterLinks[]=route('forum',$filterParams);
-            //
-            $orderLinks=[];
-            $orderRouteParams['order']='common';
-            $orderLinks[]=route('forum',$orderRouteParams);
-            $orderRouteParams['order']='latest';
-            $orderLinks[]=route('forum',$orderRouteParams);
-            $orderRouteParams['order']='hot';
-            $orderLinks[]=route('forum',$orderRouteParams);
+            if($extraParams['order']!='common'){
+                $filterParams['order']=$extraParams['order'];
+            }
+            if($extraParams['filter']!='all'){
+                $orderRouteParams['filter']=$extraParams['filter'];
+            }
+            //clean
+            if(isset($filterParams['filter'])){
+                unset($filterParams['filter']);
+            }
+            if(isset($orderRouteParams['order'])){
+                unset($orderRouteParams['order']);
+            }
         @endphp
         <div class="forum-header">
             <span class="forum-order-title">排序</span>
             <span class="sep">:</span>
-            @if($routeParams['order']=='common')
+            @if($extraParams['order']=='common')
                 <span class="forum-order-link">默认</span>
             @else
-                <a class="forum-order-link" href="{{ $orderLinks[0] }}">默认</a>
+                <a class="forum-order-link" href="{{ $forum->link($orderRouteParams) }}">默认</a>
             @endif
             <span class="sep">-</span>
-            @if($routeParams['order']=='latest')
+            @if($extraParams['order']=='latest')
                 <span class="forum-order-link">最新</span>
             @else
-                <a class="forum-order-link" href="{{ $orderLinks[1] }}">最新</a>
+                <a class="forum-order-link"
+                   href="{{ $forum->link(array_merge($orderRouteParams,['order'=>'latest'])) }}">最新</a>
             @endif
             <span class="sep">-</span>
-            @if($routeParams['order']=='hot')
+            @if($extraParams['order']=='hot')
                 <span class="forum-order-link">最热</span>
             @else
-                <a class="forum-order-link" href="{{ $orderLinks[2] }}">最热</a>
+                <a class="forum-order-link"
+                   href="{{ $forum->link(array_merge($orderRouteParams,['order'=>'hot'])) }}">最热</a>
             @endif
             <span class="sep-long">|</span>
             <span class="forum-order-title">筛选</span>
             <span class="sep">:</span>
-            @if($routeParams['filter']=='all')
+            @if($extraParams['filter']=='all')
                 <span class="forum-order-link">所有</span>
             @else
-                <a class="forum-order-link" href="{{ $filterLinks[0] }}">所有</a>
+                <a class="forum-order-link" href="{{ $forum->link($filterParams) }}">所有</a>
             @endif
             <span class="sep">-</span>
-            @if($routeParams['filter']=='good')
+            @if($extraParams['filter']=='good')
                 <span class="forum-order-link">精华</span>
             @else
-                <a class="forum-order-link" href="{{ $filterLinks[1] }}">精华</a>
+                <a class="forum-order-link"
+                   href="{{ $forum->link(array_merge($filterParams,['filter'=>'good'])) }}">精华</a>
             @endif
             <span class="sep">-</span>
-            @if($routeParams['filter']=='top')
+            @if($extraParams['filter']=='top')
                 <span class="forum-order-link">顶置</span>
             @else
-                <a class="forum-order-link" href="{{ $filterLinks[2] }}">顶置</a>
+                <a class="forum-order-link"
+                   href="{{ $forum->link(array_merge($filterParams,['filter'=>'top'])) }}">顶置</a>
             @endif
         </div>
         <div class="forum-topic-list">

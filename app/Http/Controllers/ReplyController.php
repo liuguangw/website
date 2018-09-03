@@ -11,7 +11,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ReplyCreate;
 use App\Models\Reply;
+use App\Models\Topic;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
+//use Illuminate\Support\Facades\Log;
 
 /**
  * 回复
@@ -32,12 +36,24 @@ class ReplyController extends Controller
 
     public function store(ReplyCreate $request)
     {
-        $reply = new Reply();
         $data = $request->validated();
+        $topicId = intval($data['topic_id']);
+        $topic = Topic::find($topicId);
+        if (empty($topic)) {
+            return back()->withErrors('帖子不存在');
+        } elseif ($topic->t_locked) {
+            return back()->withErrors('帖子已被锁定不能回复');
+        }
+        $reply = new Reply();
         $reply->fill($data);
-        $reply->topic_id = intval($data['topic_id']);
-        $reply->user_id = Auth::user()->id;
-        $reply->save();
+        $reply->topic()->associate($topic);
+        $reply->author()->associate(Auth::user());
+        DB::transaction(function () use ($reply) {
+            //Log::debug('before save');
+            $reply->save();
+            //Log::debug('after save');
+        });
+        //Log::debug('out transaction');
         return back()->with('reply_success', true);
     }
 }

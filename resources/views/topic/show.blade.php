@@ -21,7 +21,9 @@
     <div class="topic-reply-btns clearfix">
         <div class="btns">
             <a class="btn-post" href="{{ action('TopicController@create',['id'=>$forum->id]) }}">发帖</a>
-            <a class="btn-reply" href="javascript:void(0);" onclick="showReplyDialog(0)">回复</a>
+            @if(!$topic->t_locked)
+                <a class="btn-reply" href="javascript:void(0);" onclick="showReplyDialog(0)">回复</a>
+            @endif
         </div>
         <!--分页-->
         @component('components.pagination',['pagination'=>$pagination])
@@ -66,16 +68,8 @@
                     </td>
                     <td>
                         <div class="post-detail">
-                            <div class="post-meta">
-                                <a class="floor-num" href=""><span style="color: red;">楼主</span></a>
-                                <span>发表于 {{ $topic->post_time }}</span>
-                            </div>
-                            @if($topic->last_modify_time!==null)
-                                <div class="post-modify-tip">本帖最后由 {{ $topicAuthor->nickname }}
-                                    于 {{ $topic->last_modify_time }} 编辑
-                                </div>
-                            @endif
-                            <div class="post-content">{{ $content }}</div>
+                            @component('components.topic_content',['topic'=>$topic])
+                            @endcomponent
                         </div>
                     </td>
                 </tr>
@@ -83,9 +77,18 @@
                     <td class="left-side"></td>
                     <td class="action-nav-warp">
                         <div class="action-nav">
-                        <span class="action-item">
-                             <a class="action-reply" href="javascript:void(0);" onclick="showReplyDialog(0)">回复</a>
-                        </span>
+                            @if(!$topic->t_locked)
+                                <span class="action-item">
+                                     <a class="action-reply" href="javascript:void(0);"
+                                        onclick="showReplyDialog(0)">回复</a>
+                                </span>
+                            @endif
+                            <span class="action-item">
+                                 <a class="action-like" href="javascript:void(0);">支持 0</a>
+                            </span>
+                            <span class="action-item">
+                                 <a class="action-notlike" href="javascript:void(0);">反对 0</a>
+                            </span>
                         </div>
                     </td>
                 </tr>
@@ -103,11 +106,8 @@
                         </td>
                         <td>
                             <div class="post-detail">
-                                <div class="post-meta">
-                                    <a class="floor-num" href=""><em>{{ $replyInfo->floor_id }}</em><sup>#</sup></a>
-                                    <span>发表于 {{ $replyInfo->created_at }}</span>
-                                </div>
-                                <div class="post-content">{{ $replyInfo->content }}</div>
+                                @component('components.reply_content',['replyInfo'=>$replyInfo])
+                                @endcomponent
                             </div>
                         </td>
                     </tr>
@@ -115,9 +115,17 @@
                         <td class="left-side"></td>
                         <td class="action-nav-warp">
                             <div class="action-nav">
+                                @if(!$topic->t_locked)
+                                    <span class="action-item">
+                                        <a class="action-reply" href="javascript:void(0);"
+                                           onclick="showReplyDialog({{ $replyInfo->floor_id }})">回复</a>
+                                    </span>
+                                @endif
                                 <span class="action-item">
-                                    <a class="action-reply" href="javascript:void(0);"
-                                       onclick="showReplyDialog({{ $replyInfo->floor_id }})">回复</a>
+                                     <a class="action-like" href="javascript:void(0);">支持 0</a>
+                                </span>
+                                <span class="action-item">
+                                     <a class="action-notlike" href="javascript:void(0);">反对 0</a>
                                 </span>
                             </div>
                         </td>
@@ -129,39 +137,43 @@
     <div class="topic-reply-btns clearfix">
         <div class="btns">
             <a class="btn-post" href="{{ action('TopicController@create',['id'=>$forum->id]) }}">发帖</a>
-            <a class="btn-reply" href="javascript:void(0);" onclick="showReplyDialog(0)">回复</a>
+            @if(!$topic->t_locked)
+                <a class="btn-reply" href="javascript:void(0);" onclick="showReplyDialog(0)">回复</a>
+            @endif
         </div>
         <!--分页-->
         @component('components.pagination',['pagination'=>$pagination])
         @endcomponent
     </div>
-    @component('components.dialog',['extClass'=>' reply-dialog'])
-        <form method="post" action="{{ action('ReplyController@store') }}">
-            @csrf
-            <div class="dialog-warp">
-                <a class="dialog-close-icon" href="javascript:void(0)" onclick="hideDialog(this);"></a>
-                <h3>参与/回复主题</h3>
-                <input type="hidden" name="to_floor_id" value="0"/>
-                <input type="hidden" name="topic_id" value="{{ $topic->id }}"/>
-                <div class="reply-edit">
-                    <textarea name="content"></textarea>
-                </div>
-                <div class="reply-captcha">
-                    <span>验证码</span>
-                    <input type="text" name="captcha_code" value="" placeholder="输入验证码" autocomplete="off"/>
-                    <a href="javascript:void(0)">换一个</a>
-                    <div class="reply-captcha-warp" style="display: none;">
-                        <div>请输入下图中的字符</div>
-                        <div><img src="{{ asset('images/loading.gif') }}" alt="验证码"/></div>
+    @if(!$topic->t_locked)
+        @component('components.dialog',['extClass'=>' reply-dialog'])
+            <form method="post" action="{{ action('ReplyController@store') }}">
+                @csrf
+                <div class="dialog-warp">
+                    <a class="dialog-close-icon" href="javascript:void(0)" onclick="hideDialog(this);"></a>
+                    <h3>参与/回复主题</h3>
+                    <input type="hidden" name="to_floor_id" value="0"/>
+                    <input type="hidden" name="topic_id" value="{{ $topic->id }}"/>
+                    <div class="reply-edit">
+                        <textarea name="content"></textarea>
+                    </div>
+                    <div class="reply-captcha">
+                        <span>验证码</span>
+                        <input type="text" name="captcha_code" value="" placeholder="输入验证码" autocomplete="off"/>
+                        <a href="javascript:void(0)">换一个</a>
+                        <div class="reply-captcha-warp" style="display: none;">
+                            <div>请输入下图中的字符</div>
+                            <div><img src="{{ asset('images/loading.gif') }}" alt="验证码"/></div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="dialog-footer">
-                <a href="">本版积分规则</a>
-                <button class="dialog-btn" type="submit">参与/回复主题</button>
-            </div>
-        </form>
-    @endcomponent
+                <div class="dialog-footer">
+                    <a href="">本版积分规则</a>
+                    <button class="dialog-btn" type="submit">参与/回复主题</button>
+                </div>
+            </form>
+        @endcomponent
+    @endif
     @if($errors->any())
         @component('components.alert_dialog',['alertId'=>'topic_error_dialog','alertClass'=>'alert-danger','errors'=>$errors])
         @endcomponent

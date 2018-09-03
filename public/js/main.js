@@ -1,1 +1,47 @@
-function bindDragEvent(t){for(var e=t.getElementsByClassName("dialog-border"),o=function(t,e){t.addEventListener("mousedown",function(t){mouseStartPos.enabled=!0,mouseStartPos.target=e,mouseStartPos.targetLeft=parseInt(e.style.left),mouseStartPos.targetTop=parseInt(e.style.top),mouseStartPos.x=t.screenX,mouseStartPos.y=t.screenY,t.stopPropagation()})},s=0;s<e.length;s++)o(e[s],t);o(t.getElementsByTagName("h3").item(0),t)}function centerDialog(t){t.style.left=(window.innerWidth-t.offsetWidth)/2+"px",t.style.top=(window.innerHeight-t.offsetHeight)/2+"px"}var mouseStartPos={enabled:!1,target:null,targetLeft:0,targetTop:0,x:0,y:0};window.addEventListener("mouseup",function(t){mouseStartPos.enabled&&(mouseStartPos.enabled=!1)}),window.addEventListener("mousemove",function(t){if(mouseStartPos.enabled){var e=t.screenX-mouseStartPos.x+mouseStartPos.targetLeft,o=t.screenY-mouseStartPos.y+mouseStartPos.targetTop,s=mouseStartPos.target;s.style.left=e+"px",s.style.top=o+"px"}});
+var mouseStartPos = {
+    enabled: false,
+    target: null,
+    targetLeft: 0,
+    targetTop: 0,
+    x: 0,
+    y: 0
+};
+window.addEventListener("mouseup", function (event) {
+    if (mouseStartPos.enabled) {
+        mouseStartPos.enabled = false;
+    }
+});
+window.addEventListener("mousemove", function (event) {
+    if (mouseStartPos.enabled) {
+        var newLeft = event.screenX - mouseStartPos.x + mouseStartPos.targetLeft;
+        var newTop = event.screenY - mouseStartPos.y + mouseStartPos.targetTop;
+        var opTarget = mouseStartPos.target;
+        opTarget.style.left = newLeft + "px";
+        opTarget.style.top = newTop + "px";
+    }
+});
+
+function bindDragEvent(dialogEl) {
+    var btns = dialogEl.getElementsByClassName("dialog-border");
+    var bindFunc = function (opItem, targetDialog) {
+        opItem.addEventListener("mousedown", function (event) {
+            mouseStartPos.enabled = true;
+            mouseStartPos.target = targetDialog;
+            mouseStartPos.targetLeft = parseInt(targetDialog.style.left);
+            mouseStartPos.targetTop = parseInt(targetDialog.style.top);
+            mouseStartPos.x = event.screenX;
+            mouseStartPos.y = event.screenY;
+            event.stopPropagation();
+        });
+    };
+    for (var i = 0; i < btns.length; i++) {
+        bindFunc(btns[i], dialogEl);
+    }
+    bindFunc(dialogEl.getElementsByTagName("h3").item(0), dialogEl);
+}
+
+//将窗口居中
+function centerDialog(dialogEl) {
+    dialogEl.style.left = (window.innerWidth - dialogEl.offsetWidth) / 2 + "px";
+    dialogEl.style.top = (window.innerHeight - dialogEl.offsetHeight) / 2 + "px";
+}

@@ -11,11 +11,17 @@ namespace App\Observers;
 
 use App\Models\Reply;
 
+//use Illuminate\Support\Facades\Log;
+
 class ReplyObserver
 {
 
     public function creating(Reply $reply)
     {
+        /*帖子被锁定后禁止回复*/
+        if ($reply->topic->t_locked) {
+            return false;
+        }
         /**
          * @var Reply $lastReply
          */
@@ -38,6 +44,6 @@ class ReplyObserver
         $topic->forum->onNewReply();
         //用户:reply+1
         $reply->author->increment('reply_count');
-
+        //Log::debug('under creating');
     }
 }

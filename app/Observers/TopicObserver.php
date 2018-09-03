@@ -35,10 +35,6 @@ class TopicObserver
             $topic->last_modify_time = now();
         }
         if ($topic->isDirty('reply_count')) {
-            //被锁定时,禁止回复
-            if ($topic->t_locked) {
-                return false;
-            }
             $topic->reply_time = now();
             $topic->last_active_time = now();
         }

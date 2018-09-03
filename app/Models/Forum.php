@@ -198,10 +198,7 @@ class Forum extends Model
         return route('forum', array_merge(
                 [
                     'id' => $this->id,
-                    'type' => 'all',
-                    'filter' => 'all',
-                    'order' => 'common',
-                    'page' => 1
+                    'page' => ''
                 ],
                 $params)
         );
