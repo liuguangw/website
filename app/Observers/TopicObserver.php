@@ -18,8 +18,6 @@ class TopicObserver
         $createdTime = now();
         $topic->post_time = $createdTime;
         $topic->last_active_time = $createdTime;
-        //论坛:post+1
-        $topic->forum->onNewPost();
         //用户:post+1
         $topic->author->increment('post_count');
         //类别:post+1
@@ -38,5 +36,11 @@ class TopicObserver
             $topic->reply_time = now();
             $topic->last_active_time = now();
         }
+    }
+
+    public function created(Topic $topic)
+    {
+        //论坛数据更新
+        $topic->forum->onNewPost($topic);
     }
 }

@@ -141,8 +141,24 @@
                 <div>暂无帖子</div>
             @else
                 <table class="topic-list">
+                    @php
+                        $needShowTopSep = false;
+                    @endphp
                     @foreach($topics as $topicInfo)
-                        @component('components.topic_list_node',['topicInfo'=>$topicInfo])
+                        @php
+                            if(($extraParams['order']=='common')&&($topicInfo->order_id>1)){
+                                $needShowTopSep = true;
+                            }
+                        @endphp
+                        @if( $needShowTopSep && ($topicInfo->order_id<=1) )
+                            <tr>
+                                <td class="topic-node-sep" colspan="5"></td>
+                            </tr>
+                            @php
+                                $needShowTopSep = false;
+                            @endphp
+                        @endif
+                        @component('components.topic_list_node',['topicInfo'=>$topicInfo,'topicOrder'=>$extraParams['order']])
                         @endcomponent
                     @endforeach
                 </table>

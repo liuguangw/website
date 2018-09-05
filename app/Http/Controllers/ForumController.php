@@ -36,7 +36,7 @@ class ForumController extends Controller
          * @var Forum $forum
          */
         $forum = Forum::with(['avatarFile', 'forumGroup', 'childForums'])->findOrFail($id);
-        $builder = $forum->topics()->with(['author', 'topicType']);
+        $builder = $forum->topics()->with(['author', 'topicType', 'lastReplyUser']);
         //类别筛选
         if ($type != 'all') {
             $type = intval($type);

@@ -12,6 +12,7 @@ namespace App\Models;
 use App\Traits\TimeFormatTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * 帖子模型
@@ -19,11 +20,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id 帖子id
  * @property int $forum_id 论坛id
  * @property int $user_id 作者用户id
+ * @property int $reply_user_id 最后回复的用户id
  * @property int $topic_type_id 类别id
  * @property string $title 帖子标题
  * @property string $color 帖子颜色
  * @property int $view_count 阅读数
  * @property int $reply_count 回复数
+ * @property int $like_count 支持数
+ * @property int $notlike_count 反对数
  * @property int $order_id 排序
  * @property bool $t_disabled 是否被屏蔽
  * @property bool $t_locked 是否被锁定
@@ -36,6 +40,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property bool $is_deleted 是否标记为已删除
  * @property-read bool $is_today_post 是否为今日发表的帖子
  * @property User $author 作者
+ * @property User $lastReplyUser 最后的回复者
  * @property TopicType $topicType 帖子类别
  * @property TopicContent $topicContent 帖子内容
  * @property Forum $forum 所属论坛
@@ -90,9 +95,12 @@ class Topic extends Model
      * @var array
      */
     protected $attributes = [
+        'reply_user_id' => 0,
         'color' => '',
         'view_count' => 0,
         'reply_count' => 0,
+        'like_count' => 0,
+        'notlike_count' => 0,
         'order_id' => 1,
         't_disabled' => 0,
         't_locked' => 0,
@@ -134,6 +142,15 @@ class Topic extends Model
     }
 
     /**
+     * 最后回复者关联
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function lastReplyUser()
+    {
+        return $this->belongsTo(User::class, 'reply_user_id');
+    }
+
+    /**
      * 帖子类型关联
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -170,12 +187,26 @@ class Topic extends Model
     }
 
     /**
+     * 支持/反对关联(只有登录用户才能load)
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function likeLog()
+    {
+        return $this->hasOne(PostLikeLog::class, 'post_id')
+            ->where('post_type', PostLikeLog::TYPE_TOPIC)
+            ->where('uid', Auth::id());
+    }
+
+    /**
      * 帖子链接
      * @param int $page 页码,默认1
      * @return string
      */
     public function link(int $page = 1)
     {
+        if ($page = 1) {
+            $page = '';
+        }
         return action('TopicController@show', ['id' => $this->id, 'page' => $page]);
     }
 }

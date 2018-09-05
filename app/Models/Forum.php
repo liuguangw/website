@@ -9,6 +9,7 @@
 namespace App\Models;
 
 
+use App\Traits\TimeFormatTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -27,6 +28,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $today_updated_at 今日统计数据更新时间
  * @property bool $is_root 是否为顶级论坛
  * @property int $order_id 排序
+ * @property int $last_post_type 最后发布的类型 0空 1主题 2回复
+ * @property \Illuminate\Support\Carbon $last_post_time 最后发布的时间
+ * @property int $last_post_user_id 最后发布的用户id
+ * @property int $last_topic_id 最后活动的主题id
  * @property \Illuminate\Support\Carbon $created_at 创建时间
  * @property \Illuminate\Support\Carbon $updated_at 更新时间
  * @property \Illuminate\Support\Carbon $deleted_at 删除时间
@@ -39,17 +44,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read UploadFile $avatarFile 图标文件
  * @property-read string $avatar_url 论坛图标url
  * @property \Illuminate\Database\Eloquent\Collection $topicTypes 论坛所有帖子类型
+ * @property User $lastPostUser 最后的发布用户
+ * @property Topic $lastTopic 最后活动的主题
  */
 class Forum extends Model
 {
     use SoftDeletes;
+    use TimeFormatTrait;
 
     /**
      * 需要转换成日期的属性
      *
      * @var array
      */
-    protected $dates = ['deleted_at', 'today_updated_at'];
+    protected $dates = ['deleted_at', 'today_updated_at', 'last_post_time'];
 
     /**
      * 定义类型转换
@@ -86,6 +94,10 @@ class Forum extends Model
         'today_post_count' => 0,
         'today_reply_count' => 0,
         'order_id' => 0,
+        'last_post_type' => 0,
+        'last_post_time' => null,
+        'last_post_user_id' => 0,
+        'last_topic_id' => 0,
         'deleted_at' => null,
         'today_updated_at' => null
     ];
@@ -189,6 +201,24 @@ class Forum extends Model
         return $this->hasMany(TopicType::class);
     }
 
+    /**
+     * 最后发布的用户关联
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function lastPostUser()
+    {
+        return $this->belongsTo(User::class, 'last_post_user_id');
+    }
+
+    /**
+     * 最后活动的主帖关联
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function lastTopic()
+    {
+        return $this->belongsTo(Topic::class, 'last_topic_id');
+    }
+
     /**链接
      * @param array $params
      * @return string
@@ -228,27 +258,47 @@ class Forum extends Model
 
     /**
      * 处理论坛新帖发表记录
+     * @param Topic $topic
      * @return void
      */
-    public function onNewPost()
+    public function onNewPost(Topic $topic)
     {
         $this->increment('post_count');
         if ($this->today_updated_at->lt(today())) {
             $this->updateTodayData();
         }
         $this->increment('today_post_count');
+        $this->procNewPost($topic->user_id, $topic->id, 1);
     }
 
     /**
      * 处理论坛新的回复
+     * @param Reply $reply
      * @return void
      */
-    public function onNewReply()
+    public function onNewReply(Reply $reply)
     {
         $this->increment('reply_count');
         if ($this->today_updated_at->lt(today())) {
             $this->updateTodayData();
         }
         $this->increment('today_reply_count');
+        $this->procNewPost($reply->user_id, $reply->topic_id, 2);
+    }
+
+    /**
+     * 记录论坛最新活动的主帖
+     * @param int $userId 用户id
+     * @param int $topicId 主帖id
+     * @param int $postType 类型 0空 1主题 2回复
+     * @return void
+     */
+    private function procNewPost(int $userId, int $topicId, int $postType)
+    {
+        $this->last_post_user_id = $userId;
+        $this->last_post_type = $postType;
+        $this->last_topic_id = $topicId;
+        $this->last_post_time = now();
+        $this->save();
     }
 }

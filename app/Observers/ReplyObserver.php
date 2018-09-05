@@ -34,16 +34,21 @@ class ReplyObserver
         }
         //处理回复数
         $topic = $reply->topic;
-        //更新回复时间
+        //更新回复时间、最后回复人信息
         $topic->reply_time = now();
         $topic->last_active_time = $topic->reply_time;
+        $topic->reply_user_id = $reply->user_id;
         $topic->save();
         //帖子:reply+1
         $topic->increment('reply_count');
-        //论坛:reply+1
-        $topic->forum->onNewReply();
         //用户:reply+1
         $reply->author->increment('reply_count');
         //Log::debug('under creating');
+    }
+
+    public function created(Reply $reply)
+    {
+        //论坛数据更新
+        $reply->topic->forum->onNewReply($reply);
     }
 }

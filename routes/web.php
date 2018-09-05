@@ -29,8 +29,5 @@ Route::get('/forum_group_{id}', 'ForumController@group')->name('forumGroup');
 Route::get('/forum/{id}/{page?}', 'ForumController@show')->name('forum');
 Route::get('/forum/{id}/topics/create', 'TopicController@create');
 Route::post('/forum/topics', 'TopicController@store');
-Route::get('/forum/topic/{id}/{page}', 'TopicController@show')->where([
-    'id' => '[0-9]+',
-    'page' => '[0-9]+'
-]);
+Route::get('/forum/topic/{id}/{page?}', 'TopicController@show');
 Route::post('/forum/replies', 'ReplyController@store');

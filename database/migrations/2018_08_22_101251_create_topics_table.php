@@ -17,11 +17,14 @@ class CreateTopicsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('forum_id')->comment('所属论坛id');
             $table->unsignedInteger('user_id')->comment('用户id');
+            $table->unsignedInteger('reply_user_id')->default(0)->comment('最后回复的用户id');
             $table->unsignedInteger('topic_type_id')->comment('类别id');
             $table->string('title', 30)->comment('帖子标题');
             $table->string('color', 12)->default('')->comment('颜色');
             $table->unsignedInteger('view_count')->default(0)->comment('阅读数');
             $table->unsignedInteger('reply_count')->default(0)->comment('回复数');
+            $table->unsignedInteger('like_count')->default(0)->comment('支持数');
+            $table->unsignedInteger('notlike_count')->default(0)->comment('反对数');
             $table->unsignedInteger('order_id')->default(1)->comment('排序');
             $table->boolean('t_disabled')->default(false)->comment('是否被屏蔽');
             $table->boolean('t_locked')->default(false)->comment('是否被锁定');

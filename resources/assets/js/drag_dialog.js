@@ -1,3 +1,4 @@
+/**/
 var mouseStartPos = {
     enabled: false,
     target: null,
@@ -38,10 +39,4 @@ function bindDragEvent(dialogEl) {
         bindFunc(btns[i], dialogEl);
     }
     bindFunc(dialogEl.getElementsByTagName("h3").item(0), dialogEl);
-}
-
-//将窗口居中
-function centerDialog(dialogEl) {
-    dialogEl.style.left = (window.innerWidth - dialogEl.offsetWidth) / 2 + "px";
-    dialogEl.style.top = (window.innerHeight - dialogEl.offsetHeight) / 2 + "px";
 }

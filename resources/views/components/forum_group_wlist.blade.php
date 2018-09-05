@@ -46,9 +46,11 @@
                 </td>
                 <td class="last-post-nav">
                     <div class="forum-latest-post">
-                        <a href="#">应用中心ID被屏蔽了 附：致开发 ...</a>
-                        <div>昨天 13:06 <a
-                                href="#">8641340</a></div>
+                        @if($forumInfo->last_post_type!==0)
+                            <a href="{{ $forumInfo->lastTopic->link() }}">{{ $forumInfo->lastTopic->title }}</a>
+                            <div>{{ $forumInfo->formatTime($forumInfo->last_post_time ) }} <a
+                                    href="#">{{ $forumInfo->lastPostUser->nickname }}</a></div>
+                        @endif
                     </div>
                 </td>
             </tr>

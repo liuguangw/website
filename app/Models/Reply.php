@@ -11,6 +11,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * 帖子回复模型
@@ -22,6 +23,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $user_id 用户id
  * @property string $content 回复内容
  * @property bool $t_disabled 是否被屏蔽
+ * @property int $like_count 支持数
+ * @property int $notlike_count 反对数
  * @property \Illuminate\Support\Carbon $created_at 创建时间
  * @property \Illuminate\Support\Carbon $updated_at 更新时间
  * @property \Illuminate\Support\Carbon $deleted_at 删除时间
@@ -59,6 +62,8 @@ class Reply extends Model
     protected $attributes = [
         'to_floor_id' => 0,
         't_disabled' => 0,
+        'like_count' => 0,
+        'notlike_count' => 0,
         'deleted_at' => null
     ];
 
@@ -101,5 +106,16 @@ class Reply extends Model
     public function author()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * 支持/反对关联(只有登录用户才能load)
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function likeLog()
+    {
+        return $this->hasOne(PostLikeLog::class, 'post_id')
+            ->where('post_type', PostLikeLog::TYPE_TOPIC)
+            ->where('uid', Auth::id());
     }
 }

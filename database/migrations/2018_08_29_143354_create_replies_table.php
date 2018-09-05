@@ -21,6 +21,8 @@ class CreateRepliesTable extends Migration
             $table->unsignedInteger('user_id')->comment('回帖用户id');
             $table->string('content', 800)->comment('内容');
             $table->boolean('t_disabled')->default(false)->comment('是否被屏蔽');
+            $table->unsignedInteger('like_count')->default(0)->comment('支持数');
+            $table->unsignedInteger('notlike_count')->default(0)->comment('反对数');
             $table->timestamps();
             $table->softDeletes();
             $table->unique(['topic_id', 'floor_id']);

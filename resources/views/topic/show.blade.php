@@ -22,7 +22,13 @@
         <div class="btns">
             <a class="btn-post" href="{{ action('TopicController@create',['id'=>$forum->id]) }}">发帖</a>
             @if(!$topic->t_locked)
-                <a class="btn-reply" href="javascript:void(0);" onclick="showReplyDialog(0)">回复</a>
+                <a class="btn-reply" href="javascript:void(0);"
+                   @auth
+                   onclick="showReplyDialog(0)"
+                   @else
+                   onclick="needLogin()"
+                    @endauth
+                >回复</a>
             @endif
         </div>
         <!--分页-->
@@ -80,14 +86,43 @@
                             @if(!$topic->t_locked)
                                 <span class="action-item">
                                      <a class="action-reply" href="javascript:void(0);"
-                                        onclick="showReplyDialog(0)">回复</a>
+                                        @auth
+                                        onclick="showReplyDialog(0)"
+                                        @else
+                                        onclick="needLogin()"
+                                         @endauth
+                                     >回复</a>
                                 </span>
                             @endif
                             <span class="action-item">
-                                 <a class="action-like" href="javascript:void(0);">支持 0</a>
+                                 <a class="action-like" href="javascript:void(0);"
+                                    @auth
+                                    @if(empty($topic->likeLog))
+                                    onclick="likePost({{ $topic->id }},true)"
+                                    @elseif($topic->likeLog->is_like)
+                                    onclick="cancelLikePost({{ $topic->id }})"
+                                    @else
+                                    onclick="likePost({{ $topic->id }},false)"
+                                    @endif
+                                    @else
+                                    onclick="needLogin()"
+                                     @endauth
+                                 >支持 0</a>
                             </span>
                             <span class="action-item">
-                                 <a class="action-notlike" href="javascript:void(0);">反对 0</a>
+                                 <a class="action-notlike" href="javascript:void(0);"
+                                    @auth
+                                    @if(empty($topic->likeLog))
+                                    onclick="unlikePost({{ $topic->id }},true)"
+                                    @elseif(!$topic->likeLog->is_like)
+                                    onclick="cancelUnlikePost({{ $topic->id }})"
+                                    @else
+                                    onclick="unlikePost({{ $topic->id }},false)"
+                                    @endif
+                                    @else
+                                    onclick="needLogin()"
+                                     @endauth
+                                 >反对 0</a>
                             </span>
                         </div>
                     </td>
@@ -118,14 +153,43 @@
                                 @if(!$topic->t_locked)
                                     <span class="action-item">
                                         <a class="action-reply" href="javascript:void(0);"
-                                           onclick="showReplyDialog({{ $replyInfo->floor_id }})">回复</a>
+                                           @auth
+                                           onclick="showReplyDialog({{ $replyInfo->floor_id }})"
+                                           @else
+                                           onclick="needLogin()"
+                                            @endauth
+                                        >回复</a>
                                     </span>
                                 @endif
                                 <span class="action-item">
-                                     <a class="action-like" href="javascript:void(0);">支持 0</a>
+                                     <a class="action-like" href="javascript:void(0);"
+                                        @auth
+                                        @if(empty($replyInfo->likeLog))
+                                        onclick="likePost({{ $replyInfo->id }},true)"
+                                        @elseif($replyInfo->likeLog->is_like)
+                                        onclick="cancelLikePost({{ $replyInfo->id }})"
+                                        @else
+                                        onclick="likePost({{ $replyInfo->id }},false)"
+                                        @endif
+                                        @else
+                                        onclick="needLogin()"
+                                         @endauth
+                                     >支持 0</a>
                                 </span>
                                 <span class="action-item">
-                                     <a class="action-notlike" href="javascript:void(0);">反对 0</a>
+                                     <a class="action-notlike" href="javascript:void(0);"
+                                        @auth
+                                        @if(empty($replyInfo->likeLog))
+                                        onclick="unlikePost({{ $replyInfo->id }},true)"
+                                        @elseif(!$replyInfo->likeLog->is_like)
+                                        onclick="cancelUnlikePost({{ $replyInfo->id }})"
+                                        @else
+                                        onclick="unlikePost({{ $replyInfo->id }},false)"
+                                        @endif
+                                        @else
+                                        onclick="needLogin()"
+                                         @endauth
+                                     >反对 0</a>
                                 </span>
                             </div>
                         </td>
@@ -138,7 +202,13 @@
         <div class="btns">
             <a class="btn-post" href="{{ action('TopicController@create',['id'=>$forum->id]) }}">发帖</a>
             @if(!$topic->t_locked)
-                <a class="btn-reply" href="javascript:void(0);" onclick="showReplyDialog(0)">回复</a>
+                <a class="btn-reply" href="javascript:void(0);"
+                   @auth
+                   onclick="showReplyDialog(0)"
+                   @else
+                   onclick="needLogin()"
+                    @endauth
+                >回复</a>
             @endif
         </div>
         <!--分页-->
@@ -150,7 +220,7 @@
             <form method="post" action="{{ action('ReplyController@store') }}">
                 @csrf
                 <div class="dialog-warp">
-                    <a class="dialog-close-icon" href="javascript:void(0)" onclick="hideDialog(this);"></a>
+                    <a class="dialog-close-icon" href="javascript:void(0)" onclick="closeDialog(this);"></a>
                     <h3>参与/回复主题</h3>
                     <input type="hidden" name="to_floor_id" value="0"/>
                     <input type="hidden" name="topic_id" value="{{ $topic->id }}"/>
@@ -187,8 +257,6 @@
 @section('scripts')
     <script type="text/javascript" src="{{ asset('js/main.js') }}"></script>
     <script type="text/javascript">
-        var fadeInAnimated = "animated faster pulse",
-            fadeOutAnimated = "animated faster fadeOutUp";
         var dialogEl = document.getElementsByClassName("reply-dialog").item(0);
         bindDragEvent(dialogEl);
 
@@ -196,19 +264,18 @@
             var formEl = dialogEl.getElementsByTagName("form").item(0);
             formEl.to_floor_id.value = floor_id;
             formEl.content.value = "";
-            if (dialogEl.style.display == "none") {
-                dialogEl.style.display = "table";
-                centerDialog(dialogEl);
-                dialogEl.className += (" " + fadeInAnimated);
-            }
+            showDialog(dialogEl,{
+                display:"table",
+                center:true
+            });
         }
 
-        function hideDialog(closeBtn) {
+        function closeDialog(closeBtn) {
             var oDialog = closeBtn;
             while (oDialog.tagName.toLowerCase() != "table") {
                 oDialog = oDialog.parentNode;
             }
-            oDialog.style.display = "none";
+            hideDialog(oDialog);
         }
 
         var captchaNav = document.getElementsByClassName("reply-captcha").item(0);

@@ -1,7 +1,7 @@
 <div class="forum-group">
     <div class="forum-group-title"><a href="{{ $groupInfo->link() }}">{{ $groupInfo->name }}</a></div>
     @php
-        $forums=$groupInfo->childForums->load('avatarFile')->chunk(2);
+        $forums=$groupInfo->childForums->load(['avatarFile','lastPostUser','lastTopic'])->chunk(2);
     @endphp
     @if($forums->isEmpty())
         <div class="forums">暂无子论坛</div>
@@ -31,8 +31,13 @@
                                         @endif
                                     </div>
                                     <div>主题 {{ $forumInfo->post_count }} ,回复 {{ $forumInfo->reply_count }}</div>
-                                    <div class="forum-latest-post"><a href="#">应用中心ID被屏蔽了 附：致开发 ...</a> 昨天 13:06 <a
-                                            href="#">8641340</a></div>
+                                    <div class="forum-latest-post">
+                                        <!--最后活动的帖子-->
+                                        @if($forumInfo->last_post_type!==0)
+                                            <a href="{{ $forumInfo->lastTopic->link() }}">{{ $forumInfo->lastTopic->title }}</a> {{ $forumInfo->formatTime($forumInfo->last_post_time ) }} <a
+                                                href="#">{{ $forumInfo->lastPostUser->nickname }}</a>
+                                        @endif
+                                    </div>
                                 </div>
 
                             </td>

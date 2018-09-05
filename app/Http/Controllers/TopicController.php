@@ -91,9 +91,11 @@ class TopicController extends Controller
      * @param int $page
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show(PaginatorService $paginatorService, int $id, int $page)
+    public function show(PaginatorService $paginatorService, int $id, int $page = 1)
     {
         $topic = Topic::with(['forum', 'author', 'TopicType', 'topicContent', 'replies'])->findOrFail($id);
+        //增加阅读数
+        $topic->increment('view_count');
         $builder = $topic->replies()->with('author')->orderBy('id');
         $replies = $builder->paginate(15, ['*'], 'page', $page);
         if (($page < 1) || ($page > $replies->lastPage())) {
@@ -104,6 +106,10 @@ class TopicController extends Controller
             $params['page'] = $page;
             return action('TopicController@show', $params);
         }, $routeParams);
+        if (Auth::check()) {
+            $topic->load('likeLog');
+            $replies->load('likeLog');
+        }
         return view('topic.show', [
             'topic' => $topic,
             'topicType' => $topic->topicType,

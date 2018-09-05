@@ -84,15 +84,21 @@
 
 .forum-box .forum-topic-list .topic-list {
     width: 100%;
+    border-spacing: 0;
 }
 
 .forum-box .forum-topic-list .topic-list tr td {
     height: 28px;
     padding: 5px 0;
     overflow: hidden;
-    border-bottom: 1px dashed #dedede;
+    border-bottom: 1px solid #C2D5E3;
 }
-
+.forum-box .forum-topic-list .topic-list tr td.topic-node-sep{
+    height: 18px;
+    padding: 3px 0;
+    border-bottom-color: #CDCDCD;
+    background-color: #f2f2f2;
+}
 .forum-box .forum-topic-list .topic-list tr:last-child td {
     border-bottom: none;
 }

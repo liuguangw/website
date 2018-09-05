@@ -11,7 +11,10 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.scripts(['resources/assets/js/drag_dialog.js'], 'public/js/main.js');
+mix.scripts([
+    'resources/assets/js/app.js',
+    'resources/assets/js/drag_dialog.js'
+], 'public/js/main.js');
 mix.styles([
     'resources/assets/css/normalize.css',
     'resources/assets/css/animate.css',

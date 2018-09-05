@@ -21,6 +21,11 @@
 <div class="site-warp">
     @yield('content')
 </div>
+<div class="site-footer">
+    <div class="site-warp">
+        <p>footer</p>
+    </div>
+</div>
 @yield('scripts','')
 </body>
 </html>
