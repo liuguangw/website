@@ -92,49 +92,58 @@
             }
         @endphp
         <div class="forum-header">
-            <span class="forum-order-title">排序</span>
-            <span class="sep">:</span>
-            @if($extraParams['order']=='common')
-                <span class="forum-order-link">默认</span>
-            @else
-                <a class="forum-order-link" href="{{ $forum->link($orderRouteParams) }}">默认</a>
-            @endif
-            <span class="sep">-</span>
-            @if($extraParams['order']=='latest')
-                <span class="forum-order-link">最新</span>
-            @else
-                <a class="forum-order-link"
-                   href="{{ $forum->link(array_merge($orderRouteParams,['order'=>'latest'])) }}">最新</a>
-            @endif
-            <span class="sep">-</span>
-            @if($extraParams['order']=='hot')
-                <span class="forum-order-link">最热</span>
-            @else
-                <a class="forum-order-link"
-                   href="{{ $forum->link(array_merge($orderRouteParams,['order'=>'hot'])) }}">最热</a>
-            @endif
-            <span class="sep-long">|</span>
-            <span class="forum-order-title">筛选</span>
-            <span class="sep">:</span>
-            @if($extraParams['filter']=='all')
-                <span class="forum-order-link">所有</span>
-            @else
-                <a class="forum-order-link" href="{{ $forum->link($filterParams) }}">所有</a>
-            @endif
-            <span class="sep">-</span>
-            @if($extraParams['filter']=='good')
-                <span class="forum-order-link">精华</span>
-            @else
-                <a class="forum-order-link"
-                   href="{{ $forum->link(array_merge($filterParams,['filter'=>'good'])) }}">精华</a>
-            @endif
-            <span class="sep">-</span>
-            @if($extraParams['filter']=='top')
-                <span class="forum-order-link">顶置</span>
-            @else
-                <a class="forum-order-link"
-                   href="{{ $forum->link(array_merge($filterParams,['filter'=>'top'])) }}">顶置</a>
-            @endif
+            <table>
+                <tr>
+                    <td>
+                        <span class="forum-order-title">排序</span>
+                        <span class="sep">:</span>
+                        @if($extraParams['order']=='common')
+                            <span class="forum-order-link">默认</span>
+                        @else
+                            <a class="forum-order-link" href="{{ $forum->link($orderRouteParams) }}">默认</a>
+                        @endif
+                        <span class="sep">-</span>
+                        @if($extraParams['order']=='latest')
+                            <span class="forum-order-link">最新</span>
+                        @else
+                            <a class="forum-order-link"
+                               href="{{ $forum->link(array_merge($orderRouteParams,['order'=>'latest'])) }}">最新</a>
+                        @endif
+                        <span class="sep">-</span>
+                        @if($extraParams['order']=='hot')
+                            <span class="forum-order-link">最热</span>
+                        @else
+                            <a class="forum-order-link"
+                               href="{{ $forum->link(array_merge($orderRouteParams,['order'=>'hot'])) }}">最热</a>
+                        @endif
+                        <span class="sep-long">|</span>
+                        <span class="forum-order-title">筛选</span>
+                        <span class="sep">:</span>
+                        @if($extraParams['filter']=='all')
+                            <span class="forum-order-link">所有</span>
+                        @else
+                            <a class="forum-order-link" href="{{ $forum->link($filterParams) }}">所有</a>
+                        @endif
+                        <span class="sep">-</span>
+                        @if($extraParams['filter']=='good')
+                            <span class="forum-order-link">精华</span>
+                        @else
+                            <a class="forum-order-link"
+                               href="{{ $forum->link(array_merge($filterParams,['filter'=>'good'])) }}">精华</a>
+                        @endif
+                        <span class="sep">-</span>
+                        @if($extraParams['filter']=='top')
+                            <span class="forum-order-link">顶置</span>
+                        @else
+                            <a class="forum-order-link"
+                               href="{{ $forum->link(array_merge($filterParams,['filter'=>'top'])) }}">顶置</a>
+                        @endif
+                    </td>
+                    <td class="forum-header-author">作者</td>
+                    <td class="forum-header-count">回复/查看</td>
+                    <td class="forum-header-reply">最后发表</td>
+                </tr>
+            </table>
         </div>
         <div class="forum-topic-list">
             @if($topics->isEmpty())
@@ -146,7 +155,7 @@
                     @endphp
                     @foreach($topics as $topicInfo)
                         @php
-                            if(($extraParams['order']=='common')&&($topicInfo->order_id>1)){
+                            if(($extraParams['type']=='all')&&($extraParams['filter']=='all')&&($extraParams['order']=='common')&&($topicInfo->order_id>1)){
                                 $needShowTopSep = true;
                             }
                         @endphp
@@ -158,7 +167,7 @@
                                 $needShowTopSep = false;
                             @endphp
                         @endif
-                        @component('components.topic_list_node',['topicInfo'=>$topicInfo,'topicOrder'=>$extraParams['order']])
+                        @component('components.topic_list_node',['forum'=>$forum,'topicInfo'=>$topicInfo,'topicOrder'=>$extraParams['order']])
                         @endcomponent
                     @endforeach
                 </table>

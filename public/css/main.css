@@ -4022,6 +4022,7 @@ a:hover {
     display: block;
     box-shadow: 2px 2px 3px #968b8b;
     border-radius: 5px;
+    z-index: 100;
 }
 
 .forum-group-list .forum-group {
@@ -4195,6 +4196,28 @@ a:hover {
     color: #369;
 }
 
+.forum-box .forum-header table {
+    width: 100%;
+    border-spacing: 0;
+}
+
+.forum-box .forum-header table td {
+    padding: 0;
+    width: auto;
+}
+
+.forum-box .forum-header .forum-header-author {
+    width: 105px;
+}
+
+.forum-box .forum-header .forum-header-count {
+    width: 60px;
+}
+
+.forum-box .forum-header .forum-header-reply {
+    width: 105px;
+}
+
 .forum-box .forum-header span.sep {
     color: #928484;
     padding: 0 5px;
@@ -4246,12 +4269,18 @@ a:hover {
     overflow: hidden;
     border-bottom: 1px solid #C2D5E3;
 }
-.forum-box .forum-topic-list .topic-list tr td.topic-node-sep{
+
+.forum-box .forum-topic-list .topic-list tr:hover td {
+    background-color: #f2f2f2;
+}
+
+.forum-box .forum-topic-list .topic-list tr td.topic-node-sep {
     height: 18px;
     padding: 3px 0;
     border-bottom-color: #CDCDCD;
     background-color: #f2f2f2;
 }
+
 .forum-box .forum-topic-list .topic-list tr:last-child td {
     border-bottom: none;
 }
@@ -4369,18 +4398,18 @@ a:hover {
     display: block;
     height: 34px;
     line-height: 34px;
-    padding: 0 18px;
-    border: 1px solid #eee;
-    background-color: #28a745;
-    background-image: linear-gradient(-180deg, #34d058 0%, #28a745 90%);
+    font-size: 14px;
+    padding: 0 23px;
+    border: 1px solid #2c80cc;
+    background-color: #3c8cd1;
     color: #fff;
     border-radius: 4px;
     text-decoration: none;
 }
 
 .forum-head-nav .post-btn:hover {
-    background-color: #269f42;
-    background-image: linear-gradient(-180deg, #2fcb53 0%, #269f42 90%);
+    background-color: #2687da;
+    border-color: #0062cc;
 }
 
 /*分页样式*/
@@ -4754,7 +4783,7 @@ a:hover {
 }
 
 .topic-reply-btns {
-    padding-bottom: 5px;
+    padding-bottom: 10px;
 }
 
 .topic-reply-btns .btns {
@@ -4789,6 +4818,7 @@ a:hover {
     empty-cells: show;
     border-collapse: collapse;
     padding: 0;
+    z-index: 30;
 }
 
 .dialog .dialog-border {
@@ -4859,13 +4889,15 @@ a:hover {
     cursor: move;
 }
 
-.dialog.reply-dialog .dialog-warp .reply-edit {
+.dialog.reply-dialog .dialog-warp .reply-edit,
+.forum-box .reply-box .user-input .box-input-warp {
     height: 137px;
     border: 1px solid #ccc;
     padding: 8px;
 }
 
-.dialog.reply-dialog .dialog-warp .reply-edit textarea {
+.dialog.reply-dialog .dialog-warp .reply-edit textarea,
+.forum-box .reply-box .user-input .box-input-warp textarea {
     width: 100%;
     height: 100%;
     resize: none;
@@ -4873,13 +4905,15 @@ a:hover {
     outline: none;
 }
 
-.dialog.reply-dialog .dialog-warp .reply-captcha {
+.dialog.reply-dialog .dialog-warp .reply-captcha,
+.forum-box .reply-box .user-input .box-captcha {
     margin-top: 10px;
     position: relative;
     line-height: 18px;
 }
 
-.dialog.reply-dialog .dialog-warp .reply-captcha input {
+.dialog.reply-dialog .dialog-warp .reply-captcha input,
+.forum-box .reply-box .user-input .box-captcha input {
     width: 100px;
     height: 17px;
     padding: 2px 4px;
@@ -4888,13 +4922,14 @@ a:hover {
     border-color: #848484 #E0E0E0 #E0E0E0 #848484;
 }
 
-.dialog.reply-dialog .dialog-warp .reply-captcha a {
+.dialog.reply-dialog .dialog-warp .reply-captcha a,
+.forum-box .reply-box .user-input .box-captcha a {
     color: #369;
 }
 
-.dialog.reply-dialog .dialog-warp .reply-captcha .reply-captcha-warp {
+.dialog.reply-dialog .dialog-warp .reply-captcha .reply-captcha-warp,
+.forum-box .reply-box .user-input .box-captcha .reply-captcha-warp {
     position: absolute;
-    z-index: 301;
     left: 40px;
     top: 22px;
     background-color: #FEFEFE;
@@ -4902,9 +4937,11 @@ a:hover {
     padding: 10px;
     border: 1px solid #ddd;
     box-shadow: 1px 2px 2px #ece3e3;
+    z-index: 1;
 }
 
-.dialog.reply-dialog .dialog-warp .reply-captcha .reply-captcha-warp img {
+.dialog.reply-dialog .dialog-warp .reply-captcha .reply-captcha-warp img,
+.forum-box .reply-box .user-input .box-captcha .reply-captcha-warp img {
     max-height: 40px;
     cursor: pointer;
 }
@@ -4930,4 +4967,60 @@ a:hover {
 
 .dialog.reply-dialog .dialog-footer .dialog-btn:hover {
     background-color: #147ef1;
+}
+
+/*回帖textarea样式*/
+.forum-box .reply-box {
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+.forum-box .reply-box .current-user {
+    width: 160px;
+    background: #E5EDF2;
+    overflow: hidden;
+    border-right: 1px solid #C2D5E3;
+    padding: 15px 0 10px 0;
+    vertical-align: top;
+}
+
+.forum-box .reply-box .current-user .current-user-avatar {
+    padding: 5px 5px 8px 5px;
+    width: 120px;
+    height: 120px;
+    background-color: #fff;
+    display: block;
+    text-decoration: none;
+    margin: 0 auto;
+    box-shadow: 0px 2px 3px #d4d4d4;
+}
+
+.forum-box .reply-box .current-user .current-user-avatar img {
+    width: 100%;
+    height: 100%;
+}
+
+.forum-box .reply-box .user-input {
+    padding: 20px;
+    vertical-align: top;
+}
+.forum-box .reply-box .user-input .input-footer{
+    padding-top: 10px;
+}
+.forum-box .reply-box .user-input .input-footer .btn{
+    height: 26px;
+    padding: 0 10px;
+    border: 1px solid #235994;
+    background-color: #06C;
+    vertical-align: middle;
+    margin-right: 3px;
+    cursor: pointer;
+    box-shadow: 0 1px 0 #E5E5E5;
+    color: #fff;
+    border-radius: 2px;
+    font-weight: 700;
+}
+.forum-box .reply-box .user-input .input-footer a{
+    float: right;
 }

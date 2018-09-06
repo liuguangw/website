@@ -23,6 +23,9 @@ window.addEventListener("mousemove", function (event) {
 });
 
 function bindDragEvent(dialogEl) {
+    if(dialogEl==null){
+        return;
+    }
     var btns = dialogEl.getElementsByClassName("dialog-border");
     var bindFunc = function (opItem, targetDialog) {
         opItem.addEventListener("mousedown", function (event) {

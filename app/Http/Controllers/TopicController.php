@@ -15,6 +15,7 @@ use App\Models\TopicContent;
 use App\Http\Requests\TopicCreate;
 use App\Models\TopicType;
 use App\Services\PaginatorService;
+use App\Services\TopicService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -87,15 +88,15 @@ class TopicController extends Controller
     /**
      * 帖子详情页
      * @param PaginatorService $paginatorService
+     * @param TopicService $topicService
      * @param int $id
      * @param int $page
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show(PaginatorService $paginatorService, int $id, int $page = 1)
+    public function show(PaginatorService $paginatorService, TopicService $topicService, int $id, int $page = 1)
     {
         $topic = Topic::with(['forum', 'author', 'TopicType', 'topicContent', 'replies'])->findOrFail($id);
-        //增加阅读数
-        $topic->increment('view_count');
+        $topicService->processViewCount($topic);
         $builder = $topic->replies()->with('author')->orderBy('id');
         $replies = $builder->paginate(15, ['*'], 'page', $page);
         if (($page < 1) || ($page > $replies->lastPage())) {

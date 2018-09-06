@@ -216,6 +216,42 @@
         @endcomponent
     </div>
     @if(!$topic->t_locked)
+        <!--底部回帖区域-->
+        <div class="forum-box">
+            <table class="reply-box">
+                <tr>
+                    <td class="current-user">
+                        <div class="current-user-avatar">
+                            <img src="http://website_app/images/default/user_avatar.png" alt="头像">
+                        </div>
+                    </td>
+                    <td class="user-input">
+                        <form method="post" action="{{ action('ReplyController@store') }}">
+                            @csrf
+                            <input type="hidden" name="to_floor_id" value="0"/>
+                            <input type="hidden" name="topic_id" value="{{ $topic->id }}"/>
+                            <div class="box-input-warp">
+                                <textarea name="content">{{ old('content','') }}</textarea>
+                            </div>
+                            <div class="box-captcha">
+                                <span>验证码</span>
+                                <input type="text" name="captcha_code" value="" placeholder="输入验证码" autocomplete="off"/>
+                                <a href="javascript:void(0)">换一个</a>
+                                <div class="reply-captcha-warp" style="display: none;">
+                                    <div>请输入下图中的字符</div>
+                                    <div><img src="{{ asset('images/loading.gif') }}" alt="验证码"/></div>
+                                </div>
+                            </div>
+                            <div class="input-footer">
+                                <a href="">本版积分规则</a>
+                                <button class="btn" type="submit">发表回复</button>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!--回帖弹窗-->
         @component('components.dialog',['extClass'=>' reply-dialog'])
             <form method="post" action="{{ action('ReplyController@store') }}">
                 @csrf
@@ -264,9 +300,9 @@
             var formEl = dialogEl.getElementsByTagName("form").item(0);
             formEl.to_floor_id.value = floor_id;
             formEl.content.value = "";
-            showDialog(dialogEl,{
-                display:"table",
-                center:true
+            showDialog(dialogEl, {
+                display: "table",
+                center: true
             });
         }
 
@@ -277,53 +313,36 @@
             }
             hideDialog(oDialog);
         }
-
-        var captchaNav = document.getElementsByClassName("reply-captcha").item(0);
-        var captchaWarp = captchaNav.getElementsByClassName("reply-captcha-warp").item(0);
-        var captchaInited = false;
-
-        function reloadCaptcha() {
-            /*删除旧验证码节点*/
-            var parentEl = captchaWarp.getElementsByTagName("div").item(1);
-            var oldImgElement = parentEl.getElementsByTagName("img").item(0);
-            parentEl.removeChild(oldImgElement);
-            /*显示加载中*/
-            var loadingEl = document.createElement("img");
-            parentEl.appendChild(loadingEl);
-            loadingEl.alt = "加载中";
-            loadingEl.title = "加载中";
-            loadingEl.src = "{{ asset('images/loading.gif') }}";
-            /*加载新验证码*/
-            var imgElement = document.createElement("img");
-            imgElement.alt = "图形验证码";
-            imgElement.title = "点击刷新";
-            imgElement.addEventListener("load", function () {
-                parentEl.removeChild(parentEl.getElementsByTagName("img").item(0));
-                parentEl.appendChild(imgElement);
-                captchaInited = true;
-            });
-            imgElement.addEventListener("click", reloadCaptcha);
-            imgElement.src = "{{ route('captcha') }}?r=" + Math.random();
-        }
-
-        captchaNav.addEventListener("mouseleave", function () {
-            if (captchaWarp.style.display != "none") {
-                captchaWarp.style.display = "none";
+        function captchaBindFn(captchaNav){
+            if(captchaNav==null){
+                return;
             }
-        });
-        var focusFn = function () {
-            if (captchaWarp.style.display == "none") {
-                if (!captchaInited) {
-                    reloadCaptcha();
+            var captchaWarp = captchaNav.getElementsByClassName("reply-captcha-warp").item(0);
+            /*鼠标离开区域时,验证码隐藏*/
+            captchaNav.addEventListener("mouseleave", function () {
+                if (captchaWarp.style.display != "none") {
+                    captchaWarp.style.display = "none";
                 }
-                captchaWarp.style.display = "block";
-            }
-        };
-        captchaNav.getElementsByTagName("input").item(0).addEventListener("focus", focusFn);
-        captchaNav.getElementsByTagName("input").item(0).addEventListener("mousedown", focusFn);
-        captchaNav.getElementsByTagName("a").item(0).addEventListener("click", function () {
-            reloadCaptcha();
-        });
+            });
+            var captchaParent=captchaWarp.getElementsByTagName("div").item(1);
+            var focusFn = function () {
+                if (captchaWarp.style.display == "none") {
+                    if (!("captcha_init" in captchaParent.dataset)) {
+                        loadCaptcha(captchaParent);
+                    }
+                    captchaWarp.style.display = "block";
+                }
+            };
+            captchaNav.getElementsByTagName("input").item(0).addEventListener("focus", focusFn);
+            captchaNav.getElementsByTagName("input").item(0).addEventListener("mousedown", focusFn);
+            captchaNav.getElementsByTagName("a").item(0).addEventListener("click", function () {
+                loadCaptcha(captchaParent);
+            });
+        }
+        if(dialogEl!=null) {
+            captchaBindFn(dialogEl.getElementsByClassName("reply-captcha").item(0));
+        }
+        captchaBindFn(document.getElementsByClassName("box-captcha").item(0));
         @if($errors->any())
         (function () {
             var errorDialogEl = document.getElementById("topic_error_dialog");

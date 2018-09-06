@@ -39,16 +39,9 @@ class IndexController extends Controller
 
     public function debug(Request $request)
     {
-        $destId = rand(1, 1000);
-        $destId = 380;
-        $topic = Topic::find($destId);
-        $user = User::find(1);
-        $reply = new Reply();
-        $reply->author()->associate($user);
-        $reply->topic()->associate($topic);
-        $reply->content = 'hello at ' . now()->toDateTimeString();
-        $reply->save();
-        dump($topic->toArray(),$request->session()->all());
+
+        $key = 'topic.5.ip_' . request()->ip() . '.read_count';
+        dump($key);
         return '';
     }
 }

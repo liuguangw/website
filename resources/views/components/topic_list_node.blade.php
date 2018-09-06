@@ -1,3 +1,8 @@
+@php
+    if(empty($forum)){
+        $forum = $topicInfo->forum;
+    }
+@endphp
 <tr>
     <td class="topic-node-icon">
         <a href="">
@@ -16,7 +21,7 @@
         @if($topicInfo->topicType!==null)
             <span>[</span>
             <a class="topic-node-type"
-               href="{{ route('forum',['id'=>$topicInfo->forum_id,'type'=>$topicInfo->topic_type_id,'filter'=>'all','order'=>'common','page'=>1]) }}"
+               href="{{ $forum->link(['type'=>$topicInfo->topicType->id]) }}"
                @if($topicInfo->topicType->color!='')
                style="color: {{ $topicInfo->topicType->color }};"
                 @endif
