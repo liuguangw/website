@@ -384,6 +384,7 @@
     height: 137px;
     border: 1px solid #ccc;
     padding: 8px;
+    position: relative;
 }
 
 .dialog.reply-dialog .dialog-warp .reply-edit textarea,
@@ -393,6 +394,26 @@
     resize: none;
     border: none;
     outline: none;
+}
+
+.forum-box .reply-box .user-input .box-input-warp .login-tip {
+    position: absolute;
+    width: 100%;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    left: 0;
+    top: 50%;
+    margin-top: -16px;
+    font-size: 14px;
+}
+
+.forum-box .reply-box .user-input .box-input-warp .login-tip a {
+    color: #369;
+}
+
+.forum-box .reply-box .user-input .box-input-warp .login-tip span {
+    color: #444444;
 }
 
 .dialog.reply-dialog .dialog-warp .reply-captcha,
@@ -495,11 +516,14 @@
     padding: 20px;
     vertical-align: top;
 }
-.forum-box .reply-box .user-input .input-footer{
+
+.forum-box .reply-box .user-input .input-footer {
     padding-top: 10px;
 }
-.forum-box .reply-box .user-input .input-footer .btn{
+
+.forum-box .reply-box .user-input .input-footer .btn {
     height: 26px;
+    line-height: 24px;
     padding: 0 10px;
     border: 1px solid #235994;
     background-color: #06C;
@@ -510,7 +534,15 @@
     color: #fff;
     border-radius: 2px;
     font-weight: 700;
+    display: inline-block;
+    text-decoration: none;
+    box-sizing: border-box;
 }
-.forum-box .reply-box .user-input .input-footer a{
+
+.forum-box .reply-box .user-input .input-footer a {
     float: right;
+}
+
+.forum-box .reply-box .user-input .input-footer a.btn {
+    float: none;
 }

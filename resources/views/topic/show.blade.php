@@ -1,6 +1,11 @@
 @extends('layouts.main')
 @section('title', 'forum -'.$forum->name)
 @section('content')
+    @php
+        if(!\Illuminate\Support\Facades\Auth::check()){
+        $loginUrl=route('login');
+        }
+    @endphp
     <div class="breadcrumb">
         <ul>
             <li><a href="{{ route('home') }}">首页</a></li>
@@ -20,16 +25,17 @@
     </div>
     <div class="topic-reply-btns clearfix">
         <div class="btns">
-            <a class="btn-post" href="{{ action('TopicController@create',['id'=>$forum->id]) }}">发帖</a>
-            @if(!$topic->t_locked)
-                <a class="btn-reply" href="javascript:void(0);"
-                   @auth
-                   onclick="showReplyDialog(0)"
-                   @else
-                   onclick="needLogin()"
-                    @endauth
-                >回复</a>
-            @endif
+            @auth
+                <a class="btn-post" href="{{ action('TopicController@create',['id'=>$forum->id]) }}">发帖</a>
+                @unless($topic->t_locked)
+                    <a class="btn-reply" href="javascript:void(0);" onclick="showReplyDialog(0)">回复</a>
+                @endunless
+            @elseguest
+                <a class="btn-post" href="{{ $loginUrl }}">发帖</a>
+                @unless($topic->t_locked)
+                    <a class="btn-reply" href="{{ $loginUrl}}">回复</a>
+                @endunless
+            @endauth
         </div>
         <!--分页-->
         @component('components.pagination',['pagination'=>$pagination])
@@ -83,17 +89,18 @@
                     <td class="left-side"></td>
                     <td class="action-nav-warp">
                         <div class="action-nav">
-                            @if(!$topic->t_locked)
-                                <span class="action-item">
-                                     <a class="action-reply" href="javascript:void(0);"
-                                        @auth
-                                        onclick="showReplyDialog(0)"
-                                        @else
-                                        onclick="needLogin()"
-                                         @endauth
-                                     >回复</a>
-                                </span>
-                            @endif
+                            @unless($topic->t_locked)
+                                @auth
+                                    <span class="action-item">
+                                         <a class="action-reply" href="javascript:void(0);"
+                                            onclick="showReplyDialog(0)">回复</a>
+                                    </span>
+                                @elseguest
+                                    <span class="action-item">
+                                         <a class="action-reply" href="{{ $loginUrl }}">回复</a>
+                                    </span>
+                                @endauth
+                            @endunless
                             <span class="action-item">
                                  <a class="action-like" href="javascript:void(0);"
                                     @auth
@@ -150,17 +157,18 @@
                         <td class="left-side"></td>
                         <td class="action-nav-warp">
                             <div class="action-nav">
-                                @if(!$topic->t_locked)
-                                    <span class="action-item">
-                                        <a class="action-reply" href="javascript:void(0);"
-                                           @auth
-                                           onclick="showReplyDialog({{ $replyInfo->floor_id }})"
-                                           @else
-                                           onclick="needLogin()"
-                                            @endauth
-                                        >回复</a>
-                                    </span>
-                                @endif
+                                @unless($topic->t_locked)
+                                    @auth
+                                        <span class="action-item">
+                                             <a class="action-reply" href="javascript:void(0);"
+                                                onclick="showReplyDialog({{ $replyInfo->floor_id }})">回复</a>
+                                        </span>
+                                    @elseguest
+                                        <span class="action-item">
+                                             <a class="action-reply" href="{{ $loginUrl }}">回复</a>
+                                        </span>
+                                    @endauth
+                                @endunless
                                 <span class="action-item">
                                      <a class="action-like" href="javascript:void(0);"
                                         @auth
@@ -222,7 +230,11 @@
                 <tr>
                     <td class="current-user">
                         <div class="current-user-avatar">
-                            <img src="http://website_app/images/default/user_avatar.png" alt="头像">
+                            @auth
+                                <img src="{{ \Illuminate\Support\Facades\Auth::user()->avatar_url }}" alt="头像"/>
+                            @elseguest
+                                <img src="{{ asset('images/default/user_avatar.png') }}" alt="头像"/>
+                            @endauth
                         </div>
                     </td>
                     <td class="user-input">
@@ -231,20 +243,32 @@
                             <input type="hidden" name="to_floor_id" value="0"/>
                             <input type="hidden" name="topic_id" value="{{ $topic->id }}"/>
                             <div class="box-input-warp">
-                                <textarea name="content">{{ old('content','') }}</textarea>
+                                @auth
+                                    <textarea name="content">{{ old('content','') }}</textarea>
+                                @elseguest
+                                    <div class="login-tip"><span>您需要登录后才可以回帖</span> <a href="{{ $loginUrl }}">登录</a>
+                                        <span> | </span> <a href="{{ route('register') }}">立即注册</a></div>
+                                @endauth
                             </div>
-                            <div class="box-captcha">
-                                <span>验证码</span>
-                                <input type="text" name="captcha_code" value="" placeholder="输入验证码" autocomplete="off"/>
-                                <a href="javascript:void(0)">换一个</a>
-                                <div class="reply-captcha-warp" style="display: none;">
-                                    <div>请输入下图中的字符</div>
-                                    <div><img src="{{ asset('images/loading.gif') }}" alt="验证码"/></div>
+                            @auth
+                                <div class="box-captcha">
+                                    <span>验证码</span>
+                                    <input type="text" name="captcha_code" value="" placeholder="输入验证码"
+                                           autocomplete="off"/>
+                                    <a href="javascript:void(0)">换一个</a>
+                                    <div class="reply-captcha-warp" style="display: none;">
+                                        <div>请输入下图中的字符</div>
+                                        <div><img src="{{ asset('images/loading.gif') }}" alt="验证码"/></div>
+                                    </div>
                                 </div>
-                            </div>
+                            @endauth
                             <div class="input-footer">
                                 <a href="">本版积分规则</a>
-                                <button class="btn" type="submit">发表回复</button>
+                                @auth
+                                    <button class="btn" type="submit">发表回复</button>
+                                @elseguest
+                                    <a class="btn" href="{{ $loginUrl }}">发表回复</a>
+                                @endauth
                             </div>
                         </form>
                     </td>
@@ -313,8 +337,9 @@
             }
             hideDialog(oDialog);
         }
-        function captchaBindFn(captchaNav){
-            if(captchaNav==null){
+
+        function captchaBindFn(captchaNav) {
+            if (captchaNav == null) {
                 return;
             }
             var captchaWarp = captchaNav.getElementsByClassName("reply-captcha-warp").item(0);
@@ -324,7 +349,7 @@
                     captchaWarp.style.display = "none";
                 }
             });
-            var captchaParent=captchaWarp.getElementsByTagName("div").item(1);
+            var captchaParent = captchaWarp.getElementsByTagName("div").item(1);
             var focusFn = function () {
                 if (captchaWarp.style.display == "none") {
                     if (!("captcha_init" in captchaParent.dataset)) {
@@ -339,7 +364,8 @@
                 loadCaptcha(captchaParent);
             });
         }
-        if(dialogEl!=null) {
+
+        if (dialogEl != null) {
             captchaBindFn(dialogEl.getElementsByClassName("reply-captcha").item(0));
         }
         captchaBindFn(document.getElementsByClassName("box-captcha").item(0));
