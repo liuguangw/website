@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link href="{{ asset('css/main.css') }}" rel="stylesheet" type="text/css"/>
-@yield('styles','')
+@stack('styles')
 <!-- CSRF Token -->
     <script type="text/javascript">
         window.app_csrf = "{{ csrf_token() }}";
@@ -26,6 +26,6 @@
         <p>footer</p>
     </div>
 </div>
-@yield('scripts','')
+@stack('scripts','')
 </body>
 </html>

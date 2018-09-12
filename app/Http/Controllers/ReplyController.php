@@ -54,6 +54,6 @@ class ReplyController extends Controller
             //Log::debug('after save');
         });
         //Log::debug('out transaction');
-        return back()->with('reply_success', true);
+        return back()->with('success', '回复成功');
     }
 }

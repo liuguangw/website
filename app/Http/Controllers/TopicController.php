@@ -47,20 +47,25 @@ class TopicController extends Controller
         ]);
     }
 
+    /**
+     * 保存帖子数据
+     * @param TopicCreate $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(TopicCreate $request)
     {
-        $formRequest = $request->request;
-        $forum = Forum::find($formRequest->getInt('forum_id', 0));
+        $forumId = intval($request->input('forum_id', 0));
+        $forum = Forum::find($forumId);
         if (empty($forum)) {
             return back()->withErrors('不存在此论坛');
         }
         $topic = new Topic();
-        $topic->title = $formRequest->get('title', '');
+        $topic->fill($request->only('title'));
         //关联论坛和用户
         $topic->forum()->associate($forum);
         $topic->author()->associate(Auth::user());
         //帖子类别
-        $topicTypeId = $formRequest->getInt('topic_type', 0);
+        $topicTypeId = intval($request->input('topic_type', 0));
         if ($topicTypeId == 0) {
             $topic->topic_type_id = $topicTypeId;
         } else {
@@ -75,10 +80,10 @@ class TopicController extends Controller
         try {
             $topic->save();
             $topicContent = new TopicContent();
-            $topicContent->content = $formRequest->get('content', '');
+            $topicContent->fill($request->only('content'));
             $topic->topicContent()->save($topicContent);
             DB::commit();
-            return redirect()->route('forum', ['id' => $topic->forum_id, 'type' => 'all', 'filter' => 'all', 'order' => 'common', 'page' => 1]);
+            return redirect()->to($forum->link());
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->withErrors($e->getMessage());

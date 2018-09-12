@@ -17,6 +17,7 @@ use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
@@ -50,8 +51,19 @@ class UserController extends Controller
         return $user;
     }
 
-    public function login()
+    /**
+     * 展示登录页面
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function login(Request $request)
     {
+        if ($request->query->has('back')) {
+            $prevUrl = url()->previous();
+            if (!empty($prevUrl)) {
+                Session::put('url.intended', $prevUrl);
+            }
+        }
         return view('user.login', ['defaultAction' => 'login']);
     }
 

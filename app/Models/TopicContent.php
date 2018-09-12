@@ -24,6 +24,13 @@ use Illuminate\Database\Eloquent\Model;
 class TopicContent extends Model
 {
     /**
+     * 可以被批量赋值的属性。
+     *
+     * @var array
+     */
+    protected $fillable = ['content'];
+
+    /**
      * 帖子关联
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
