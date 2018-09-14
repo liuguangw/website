@@ -67,7 +67,7 @@ class ForumController extends Controller
         }
         //分页
         $topics = $builder
-            ->paginate(10, ['*'], 'page', $page);
+            ->paginate(25, ['*'], 'page', $page);
         if (($page < 1) || ($page > $topics->lastPage())) {
             abort(404);
         }

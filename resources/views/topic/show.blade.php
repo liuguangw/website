@@ -36,6 +36,7 @@
                     </div>
                 </td>
                 <td>
+                    {{-- 帖子类别和标题显示 --}}
                     <div class="topic-title">
                         @unless(empty($topicType))
                             <span>[</span>

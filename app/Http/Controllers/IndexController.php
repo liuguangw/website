@@ -15,8 +15,10 @@ use App\Models\Reply;
 use App\Models\Topic;
 use App\Models\User;
 use App\Services\CaptchaService;
+use App\Services\LevelService;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class IndexController extends Controller
 {
@@ -35,13 +37,5 @@ class IndexController extends Controller
     public function captcha(CaptchaService $captchaService)
     {
         return $captchaService->getCaptchaResponse();
-    }
-
-    public function debug(Request $request)
-    {
-
-        $key = 'topic.5.ip_' . request()->ip() . '.read_count';
-        dump($key);
-        return '';
     }
 }

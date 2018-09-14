@@ -13,7 +13,9 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UsersTableSeeder::class,
-            ForumsTableSeeder::class
+            ForumsTableSeeder::class,
+            LevelsTableSeeder::class,
+            ForumConfigsSeeder::class
         ]);
     }
 }

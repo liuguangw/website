@@ -176,8 +176,7 @@ class UserController extends Controller
     }
 
     /**
-     * 修改密码页面
-     * @todo
+     * @todo 修改密码页面
      */
     public function modifyPassword()
     {

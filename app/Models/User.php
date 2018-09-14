@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\LevelService;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -30,6 +31,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property bool $is_deleted 是否标记为已删除
  * @property-read UploadFile $avatarFile 头像文件
  * @property-read string $avatar_url 头像url
+ * @property-read Level $level 用户等级
  */
 class User extends Authenticatable
 {
@@ -118,9 +120,18 @@ class User extends Authenticatable
 
     public function getAvatarUrlAttribute()
     {
-        if($this->avatarFile===null){
+        if ($this->avatarFile === null) {
             return asset('images/default/user_avatar.png');
         }
         return $this->avatarFile->url;
+    }
+
+    public function getLevelAttribute()
+    {
+        /**
+         * @var LevelService $levelService
+         */
+        $levelService = resolve(LevelService::class);
+        return $levelService->getLevel($this->exp_count);
     }
 }
