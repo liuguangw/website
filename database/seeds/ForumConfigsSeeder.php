@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Services\ForumConfigService;
 use Illuminate\Support\Facades\DB;
 
 class ForumConfigsSeeder extends Seeder
@@ -72,6 +71,9 @@ class ForumConfigsSeeder extends Seeder
             ['item_key' => 'guest.can_view_forum', 'description' => '游客是否能查看论坛', 'item_value' => 1],
             ['item_key' => 'guest.can_view_topic', 'description' => '游客是否能查看帖子', 'item_value' => 1],
             ['item_key' => 'guest.can_view_reply', 'description' => '游客是否能查看回帖', 'item_value' => 1],
+            // 黑名单发言限制
+            ['item_key' => 'block_user.can_post_topic', 'description' => '此论坛被屏蔽的用户能否发表帖子', 'item_value' => 0],
+            ['item_key' => 'block_user.can_post_reply', 'description' => '此论坛被屏蔽的用户能否发表回帖', 'item_value' => 0],
             //基本配置
             ['item_key' => 'site.name', 'description' => '网站名称', 'item_value' => '流光网']
         ]);

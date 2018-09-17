@@ -9,9 +9,11 @@
 namespace App\Models;
 
 
+use App\Services\ForumConfigService;
 use App\Traits\TimeFormatTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * 论坛模型
@@ -40,7 +42,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \Illuminate\Database\Eloquent\Collection $parentForums 上级论坛列表
  * @property-read \Illuminate\Database\Eloquent\Collection $childForums 直接下级级论坛列表
  * @property-read \Illuminate\Database\Eloquent\Collection $allChildForums 所有下级论坛列表
+ * @property-read \Illuminate\Database\Eloquent\Collection $metas 规则属性列表
+ * @property-read \Illuminate\Database\Eloquent\Collection $result_metas 经过计算得到的最终属性规则列表
  * @property-read \Illuminate\Database\Eloquent\Collection $topics 主题列表
+ * @property-read \Illuminate\Database\Eloquent\Collection $blockUsers 论坛黑名单列表
  * @property-read UploadFile $avatarFile 图标文件
  * @property-read string $avatar_url 论坛图标url
  * @property \Illuminate\Database\Eloquent\Collection $topicTypes 论坛所有帖子类型
@@ -101,6 +106,8 @@ class Forum extends Model
         'deleted_at' => null,
         'today_updated_at' => null
     ];
+
+    private $cachedMetas = null;
 
     public function getIsDeletedAttribute()
     {
@@ -184,6 +191,70 @@ class Forum extends Model
     }
 
     /**
+     * 论坛规则属性关联
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function metas()
+    {
+        return $this->hasMany(ForumMeta::class);
+    }
+
+    public function getResultMetasAttribute()
+    {
+        if ($this->metas->isNotEmpty()) {
+            return $this->metas;
+        }
+        if (!$this->is_root) {
+            $parentForums = $this->parentForums->load('metas')->reverse();
+            foreach ($parentForums as $forum) {
+                if ($forum->metas->isNotEmpty()) {
+                    return $forum->metas;
+                }
+            }
+        }
+        //返回默认值
+        $metaKeys = array_keys(ForumMeta::META_DESCRIPTIONS);
+        /**
+         * @var ForumConfigService $forumConfigService
+         */
+        $forumConfigService = resolve(ForumConfigService::class);
+        $config = $forumConfigService->getMuti($metaKeys);
+        $result = collect();
+        foreach ($metaKeys as $metaItemKey) {
+            $tempMeta = new ForumMeta();
+            $tempMeta->setRawAttributes([
+                'forum_id' => $this->id,
+                'meta_item_key' => $metaItemKey,
+                'meta_item_value' => $config->get($metaItemKey, '')
+            ]);
+            $result->push($tempMeta);
+        }
+        return $result;
+    }
+
+    /**
+     * 获取规则属性值
+     * @param string $metaItemKey 键名
+     * @param mixed $default 默认值
+     * @return mixed
+     */
+    public function getMetaValue(string $metaItemKey, $default = null)
+    {
+        if ($this->cachedMetas === null) {
+            $this->cachedMetas = $this->result_metas;
+        }
+        /**
+         * @var ForumMeta|null $result
+         */
+        $result = $this->cachedMetas->firstWhere('meta_item_key', '=', $metaItemKey);
+        if ($result === null) {
+            return $default;
+        } else {
+            return $result->meta_item_value;
+        }
+    }
+
+    /**
      * 主题列表
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -217,6 +288,17 @@ class Forum extends Model
     public function lastTopic()
     {
         return $this->belongsTo(Topic::class, 'last_topic_id');
+    }
+
+    /**
+     * 当前论坛黑名单列表
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function blockUsers()
+    {
+        return $this->hasMany(BlockUser::class)->where('is_free', 0)->where(function (Builder $query) {
+            $query->whereNull('end_time')->orWhere('end_time', '>', now()->toDateTimeString());
+        });
     }
 
     /**链接
@@ -269,6 +351,16 @@ class Forum extends Model
         }
         $this->increment('today_post_count');
         $this->procNewPost($topic->user_id, $topic->id, 1);
+        //根据规则增加金币、经验
+        $author = $topic->author;
+        $addCoin = $this->getMetaValue('post_topic.coin', 0);
+        $addExp = $this->getMetaValue('post_topic.exp', 0);
+        if ($addCoin > 0) {
+            $author->increment('coin_count', $addCoin);
+        }
+        if ($addExp > 0) {
+            $author->increment('exp_count', $addExp);
+        }
     }
 
     /**
@@ -284,6 +376,16 @@ class Forum extends Model
         }
         $this->increment('today_reply_count');
         $this->procNewPost($reply->user_id, $reply->topic_id, 2);
+        //根据规则增加金币、经验
+        $author = $reply->author;
+        $addCoin = $this->getMetaValue('post_reply.coin', 0);
+        $addExp = $this->getMetaValue('post_reply.exp', 0);
+        if ($addCoin > 0) {
+            $author->increment('coin_count', $addCoin);
+        }
+        if ($addExp > 0) {
+            $author->increment('exp_count', $addExp);
+        }
     }
 
     /**

@@ -15,7 +15,8 @@ class DatabaseSeeder extends Seeder
             UsersTableSeeder::class,
             ForumsTableSeeder::class,
             LevelsTableSeeder::class,
-            ForumConfigsSeeder::class
+            ForumConfigsSeeder::class,
+            ForumMetasSeeder::class
         ]);
     }
 }

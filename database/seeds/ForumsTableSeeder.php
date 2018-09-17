@@ -56,7 +56,7 @@ class ForumsTableSeeder extends Seeder
         }
         //插入默认帖子
         $opUser = \App\Models\User::find(1);
-        for ($i = 0; $i < 200; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             for ($j = 0; $j < 5; $j++) {
                 $topic = new \App\Models\Topic();
                 $topic->forum()->associate($opForum);

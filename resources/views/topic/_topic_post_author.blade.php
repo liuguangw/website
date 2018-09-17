@@ -22,7 +22,7 @@
             </tr>
         </table>
     </div>
-    <p><a href="">level 1</a></p>
+    <p><a href="">{{ $author->level->name }}</a></p>
     <dl class="user-meta">
         <dt>ID</dt>
         <dd><a href="">{{ $author->id }}</a></dd>
